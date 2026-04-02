@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="#10b981">
+    <link rel="manifest" href="manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(e => console.log('SW Registration failed:', e));
+            });
+        }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Tunisia Mind AI - Chat AI Tunisia</title>
+    <meta name="description" content="Tunisia Mind AI موقع ذكاء اصطناعي للدردشة وطرح الأسئلة ومساعدة المستخدمين في تونس والعالم.">
+    <meta name="keywords" content="Tunisia AI, Tunisia Mind AI, ذكاء اصطناعي تونس, AI chat Tunisia">
+    <meta name="author" content="Tunisia Mind AI">
+    <meta property="og:title" content="Tunisia Mind AI">
+    <meta property="og:description" content="موقع ذكاء اصطناعي للدردشة والإجابة عن الأسئلة">
+    <meta property="og:type" content="website">
+    <link rel="icon" href="assets/tunisia-brain-new.jpg">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Inter:wght@300;400;500;700&family=Cairo:wght@300;400;600;700&family=Almarai:wght@300;400;700&family=Noto+Kufi+Arabic:wght@300;400;700&family=Roboto:wght@300;400;500;700&family=Poppins:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script src="https://js.puter.com/v2/"></script>
+    
+    <!-- KaTeX for Math support -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    
+    <!-- Chart.js for Visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="dark-theme">
+    <!-- Splash Screen -->
+    <div id="splashScreen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#050505; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:99999; transition:opacity 1s ease-out;">
+        <div style="text-align:center;">
+            <img src="assets/joseph-ben-splash.jpg" alt="Splash" style="max-width:300px; border-radius:30px; box-shadow:0 0 40px rgba(255, 0, 0, 0.5); margin-bottom:25px; display:block; margin-left:auto; margin-right:auto;">
+            <h1 style="color:#fff; font-family:'Poppins', sans-serif; font-size:3rem; letter-spacing:3px; text-shadow:0 0 20px rgba(255,255,255,0.4); margin:0;">𝕁𝕠𝕤𝕖𝕡𝕙 𝔹𝕖𝕟</h1>
+        </div>
+    </div>
+    
+    <script>
+        // Splash screen auto-hide after 5 seconds
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => {
+                        splash.remove(); 
+                        // تفعيل تسجيل الدخول بجوجل فقط
+                        if (!window.currentUser && window.showAuthModal) {
+                            window.showAuthModal();
+                        }
+                    }, 1000);
+                }
+            }, 5000);
+        });
+    </script>
+
+    <div class="wallpaper-overlay" id="wallpaperOverlay"></div>
+    <div class="app-container">
+
+        <!-- ===== SIDEBAR ===== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-chat-btn" id="newChatBtn">
+                    <i class="fa-solid fa-plus"></i>
+                    <span data-i18n="new_chat">محادثة جديدة</span>
+                </button>
+            </div>
+
+
+
+            <!-- Pinned chats section -->
+            <div class="history-section" id="pinnedSection" style="display:none;">
+                <span class="section-label" data-i18n="pinned">مثبّت</span>
+                <div id="pinnedChatsList"></div>
+            </div>
+
+            <!-- History list from ui.js -->
+            <div class="history-section">
+                <span class="section-label" data-i18n="today">اليوم</span>
+                <div class="history-list"></div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-info-bar" id="userInfoBar">
+                    <div class="user-avatar-wrap">
+                        <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/initials/svg?seed=U" alt="Avatar"
+                            class="avatar-small">
+                        <span class="online-dot"></span>
+                    </div>
+                    <span id="userNameDisplay" class="user-name-display">---</span>
+                    <div id="streakBadge" class="streak-badge" title="سلسلة العمل اليومي 🔥" style="display:flex; align-items:center; gap:4px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#ef4444; padding:2px 8px; border-radius:12px; font-size:0.8rem; margin-inline-start:10px;">
+                        <i class="fa-solid fa-fire"></i>
+                        <span id="streakCount">0</span>
+                    </div>
+                    <i class="fa-solid fa-crown" id="premiumBadge" style="color:#fbbf24; margin-right:8px; display:none;" title="Premium User"></i>
+                </div>
+                <div class="sidebar-actions">
+                    <button class="sidebar-icon-btn" id="insightsBtn" title="إحصائياتي">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </button>
+                    <button class="sidebar-icon-btn" id="settingsBtn" data-i18n-title="settings" title="الإعدادات">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                    <button class="sidebar-icon-btn logout-sidebar-btn" id="sidebarLogoutBtn" data-i18n-title="logout" title="تسجيل الخروج">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ===== MAIN CHAT ===== -->
+        <main class="main-chat">
+            <header class="chat-header">
+                <button class="toggle-sidebar-btn" id="toggleSidebarBtn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="header-center">
+                    <div class="header-logo-wrap" id="headerLogoWrap">
+                        <img id="siteLogo" src="assets/tunisia-brain-new.jpg" alt="Logo"
+                            style="display:block; height: 32px; margin-inline-end: 10px; border-radius: 50%;"
+                            onerror="this.style.display='none'">
+                        <span class="logo-emoji" id="logoEmoji" style="font-size: 1.5rem; display: none;">🧠</span>
+                    </div>
+                    <span class="brand-name" id="currentChatTitle" data-i18n="brand_name">العقل التونسي</span>
+                    <span class="badge-beta">Beta</span>
+                </div>
+                
+                <!-- Unified Dynamic Quota Indicator -->
+                <div id="topRateLimitDisplay" style="display: flex; align-items: center; gap: 10px; margin-inline-end: auto; margin-inline-start: 15px;">
+                    <div id="unifiedQuotaIndicator" class="dynamic-quota-pill">
+                        <i id="quotaIcon" class="fa-solid fa-bolt"></i>
+                        <strong id="quotaCount">100</strong>
+                        <span id="quotaLabel">MSM</span>
+                        <div class="quota-progress-mini"><div id="quotaProgressFill" style="width: 100%;"></div></div>
+                        <i class="fa-solid fa-crown" style="margin-left:5px; color:#fbbf24; font-size:0.75rem; display:none;" id="premiumBadge"></i>
+                </div>
+                </div>
+
+                <div class="header-right-actions" style="display: flex; gap: 8px; align-items: center;">
+                    <button class="icon-btn" id="shareChatBtn" data-i18n-title="share" title="مشاركة"
+                        style="display:none; font-size: 1.1rem; padding: 6px;"><i class="fa-solid fa-share-nodes"></i></button>
+                </div>
+            </header>
+
+            <!-- Chat body -->
+            <div class="chat-container" id="chatContainer">
+                <!-- Verification Banner -->
+                <div id="unverifiedBanner" class="unverified-banner" style="display:none;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span data-i18n="unverified_msg">حسابك غير موثق حالياً.</span>
+                    <button id="verifyNowBtn" data-i18n="verify_now">اضغط هنا لتوثيقه</button>
+                </div>
+
+                <!-- Welcome screen -->
+                <div class="welcome-screen" id="welcomeScreen">
+                    <div class="welcome-inner">
+                        <div class="brand-logo">
+                            <img id="welcomeLogo" src="assets/tunisia-brain-new.jpg"
+                                style="width: 120px; height: 120px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);"
+                                onerror="this.outerHTML='<div style=\'font-size: 80px; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary); border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);\'>🧠</div>'">
+                        </div>
+                        <h1 id="welcomeTitle" data-i18n="welcome_title">كيف يمكنني مساعدتك اليوم؟</h1>
+                        <p class="welcome-sub" id="welcomeSub" data-i18n="welcome_sub">اسألني أي شيء، اطلب كوداً، أو
+                            ابدأ محادثة</p>
+                        <div class="suggestions-grid">
+                            <button class="suggestion-card" data-prompt="اشرح مفهوماً معقداً بشكل مبسط وجذاب">
+                                <i class="fa-solid fa-lightbulb"></i>
+                                <span data-i18n="sug1">اشرح مفهوماً معقداً ببساطة</span>
+                            </button>
+                            <button class="suggestion-card" data-prompt="ساعدني في تعلم شيء جديد اليوم">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                <span data-i18n="sug2">ساعدني في تعلم شيء جديد</span>
+                            </button>
+                            <button class="suggestion-card" data-prompt="أعطني 5 أفكار إبداعية لمشروع أو نشاط جديد">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span data-i18n="sug3">أعطني أفكاراً إبداعية</span>
+                            </button>
+                            <button class="suggestion-card"
+                                data-prompt="أجب على سؤال في المعلومات العامة (علوم، تاريخ، أو جغرافيا)">
+                                <i class="fa-solid fa-earth-africa"></i>
+                                <span data-i18n="sug4">أجب على سؤال معلومات عامة</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="messages-wrapper" id="messagesWrapper"></div>
+            </div>
+
+            <!-- Input area -->
+            <div class="input-area-wrapper" id="inputAreaWrapper" style="position: sticky; bottom: 0; width: 100%; z-index: 10;">
+                
+                <!-- NEW Image Preview Area -->
+                <div id="imagePreviewContainer" style="display:none; padding: 8px; position:absolute; top:-70px; left: 15px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.15); align-items: center; justify-content: center;">
+                    <button id="cancelImagePreviewBtn" style="position:absolute; top: -6px; right: -6px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; z-index: 2;"><i class="fa-solid fa-xmark"></i></button>
+                    <img id="imagePreviewImg" src="" style="height: 50px; border-radius: 6px; display: block; object-fit: cover;">
+                </div>
+                
+                <div class="input-container" id="inputContainer">
+                    <!-- Persona Selector (Group Chat Mode) -->
+                    <select id="personaSelector" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 6px; padding: 4px; font-size: 0.8rem; outline: none; flex-shrink: 0;">
+                        <option value="العقل التونسي">🧠 العقل التونسي</option>
+                        <option value="يوسف">👨 يوسف</option>
+                        <option value="أحمد">👦 أحمد</option>
+                        <option value="ريم">👩 ريم</option>
+                        <option value="ليلى">👧 ليلى</option>
+                    </select>
+
+                    <!-- Hidden File Input for Analysis -->
+                    <input type="file" id="fileInputAlpha" style="display:none;" accept=".txt,.js,.py,.html,.css,.json,.md,.pdf">
+                    <button class="input-icon-btn" id="attachBtnAlpha" title="ارفاق ملف للتحليل" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:1.2rem; padding:0 8px;">
+                        <i class="fa-solid fa-paperclip"></i>
+                    </button>
+                    
+                    <div class="textarea-wrap">
+                        <textarea id="messageInput" data-i18n-placeholder="type_message"
+                            placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+                    </div>
+                    <button class="send-btn" id="sendMessageBtn">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-footer" style="display:none;">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+
+
+
+    <!-- Auth Modal -->
+    <!-- Auth Modal -->
+    <div id="authModal" class="modal-overlay" style="display:none;">
+        <div class="auth-card" id="authCard">
+            <div class="auth-logo">🧠 <span data-i18n="brand_name">العقل التونسي</span></div>
+
+            <!-- Login Only via Google -->
+            <div id="loginForm">
+                <h2 data-i18n="login">تسجيل الدخول / إنشاء حساب</h2>
+                <div style="margin-top: 1.5rem; text-align: center;">
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">استخدم حساب Google الخاص بك للدخول إلى المنصة فوراً وبأمان.</p>
+                    <button class="btn-google" id="googleLoginBtn"><i class="fa-brands fa-google"></i> <span
+                            data-i18n="google_login">المتابعة باستخدام Google</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insights Modal -->
+    <div id="insightsModal" class="modal-overlay">
+        <div class="modal-content insights-modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-chart-line"></i> إحصائياتي (Insights)</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <span class="insight-label">إجمالي الرسائل</span>
+                        <span class="insight-value" id="statsTotalMsg">0</span>
+                    </div>
+                    <div class="insight-card">
+                        <span class="insight-label">الوقت الموفر (تقديرياً)</span>
+                        <span class="insight-value" id="statsTimeSaved">0 س</span>
+                    </div>
+                </div>
+                <div class="stats-chart-wrap">
+                    <canvas id="topicsChart"></canvas>
+                </div>
+                <div id="topTopicsList" class="top-topics-list"></div>
+            </div>
+        </div>
+    </div>
+    <div id="settingsModal" class="modal-overlay">
+        <div class="settings-card">
+            <div class="settings-header">
+                <h2 data-i18n="settings">الإعدادات</h2>
+                <button class="icon-btn modal-close" id="closeSettingsBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="settings-layout">
+                <!-- Tabs nav -->
+                <nav class="settings-nav">
+                    <button class="snav-btn active" data-tab="tab-profile"><i class="fa-solid fa-user"></i> <span
+                            data-i18n="profile">الملف الشخصي</span></button>
+                    <button class="snav-btn" data-tab="tab-account"><i class="fa-solid fa-envelope"></i> <span
+                            data-i18n="account">الحساب</span></button>
+                    <button class="snav-btn" data-tab="tab-appearance"><i class="fa-solid fa-palette"></i> <span
+                            data-i18n="appearance">المظهر</span></button>
+                    <button class="snav-btn" data-tab="tab-social"><i class="fa-solid fa-share-nodes"></i> <span
+                            data-i18n="social_media">تواصل اجتماعي</span></button>
+                    <button class="snav-btn" data-tab="tab-notifications"><i class="fa-solid fa-bell"></i> <span
+                            data-i18n="notifications">الإشعارات</span></button>
+                    <button class="snav-btn" data-tab="tab-language"><i class="fa-solid fa-globe"></i> <span
+                            data-i18n="language">اللغة</span></button>
+                    <button class="snav-btn" data-tab="tab-support"><i class="fa-solid fa-headset"></i> <span
+                            data-i18n="support">الدعم</span></button>
+                </nav>
+                <!-- Content -->
+                <div class="settings-content">
+
+                    <!-- Profile Tab -->
+                    <div id="tab-profile" class="stab active">
+                        <h3 data-i18n="profile">الملف الشخصي</h3>
+                        <div class="form-row">
+                            <div class="form-group"><label data-i18n="first_name_lbl">الاسم</label><input type="text"
+                                    id="profileFirstName" class="form-input"></div>
+                            <div class="form-group"><label data-i18n="last_name_lbl">اللقب</label><input type="text"
+                                    id="profileLastName" class="form-input"></div>
+                        </div>
+                        <div class="form-group"><label data-i18n="age_lbl">العمر</label><input type="number"
+                                id="profileAge" class="form-input" min="8" max="120"></div>
+                        <div class="form-group"><label data-i18n="email_lbl">البريد الإلكتروني</label><input
+                                type="email" id="profileEmail" class="form-input" readonly style="opacity:0.6;"></div>
+                        <button class="btn-primary" id="saveProfileBtn" data-i18n="save_changes">حفظ التغييرات</button>
+                    </div>
+
+                    <!-- Account Tab -->
+                    <div id="tab-account" class="stab" style="display:none;">
+                        <h3 data-i18n="account">الحساب</h3>
+                        <div class="form-group">
+                            <label data-i18n="current_email">البريد الإلكتروني الحالي</label>
+                            <input type="email" id="accountEmail" class="form-input" readonly style="opacity:0.6;">
+                        </div>
+                        <hr class="divider" id="passwordSettingsDivider">
+                        <div class="form-group" id="passwordSettingsSection">
+                            <label data-i18n="password">كلمة المرور</label>
+                            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.5rem;"
+                                data-i18n="pass_reset_info">يمكنك إعادة تعيين كلمة المرور عبر استلام رمز تحقق على بريدك.
+                            </p>
+                            <button class="btn-secondary" id="accountResetPasswordBtn" data-i18n="reset_pass_now">إعادة
+                                تعيين الآن</button>
+                        </div>
+                        <hr class="divider">
+                        <button class="btn-danger" id="mainLogoutBtn" type="button" style="width:100%;"><i
+                                class="fa-solid fa-right-from-bracket"></i> <span data-i18n="logout">تسجيل
+                                الخروج</span></button>
+                    </div>
+
+                    <!-- Appearance Tab -->
+                    <div id="tab-appearance" class="stab" style="display:none;">
+                        <h3 data-i18n="appearance">المظهر</h3>
+                        <div class="form-group">
+                            <label data-i18n="mode">الوضع</label>
+                            <div class="theme-toggle-group">
+                                <button class="theme-btn active" data-theme="dark"><i class="fa-solid fa-moon"></i>
+                                    <span data-i18n="dark">ليلي</span></button>
+                                <button class="theme-btn" data-theme="light"><i class="fa-solid fa-sun"></i> <span
+                                        data-i18n="light">نهاري</span></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="accent_color">لون التمييز</label>
+                            <div class="accent-color-picker">
+                                <button class="accent-btn active" data-color="#10b981"
+                                    style="background:#10b981;"></button>
+                                <button class="accent-btn" data-color="#3b82f6" style="background:#3b82f6;"></button>
+                                <button class="accent-btn" data-color="#8b5cf6" style="background:#8b5cf6;"></button>
+                                <button class="accent-btn" data-color="#f59e0b" style="background:#f59e0b;"></button>
+                                <button class="accent-btn" data-color="#ef4444" style="background:#ef4444;"></button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fa-solid fa-image"></i> <span data-i18n="backgrounds">خلفيات 4K
+                                    مذهلة</span></label>
+                            <div id="backgroundGrid" class="background-grid">
+                                <!-- سيتم توليدها برمجياً من ui.js -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="font_family">نوع الخط</label>
+                            <select id="fontFamilySelect" class="form-input">
+                                <option value="tajawal" data-i18n="default_font">Tajawal (افتراضي)</option>
+                                <option value="cairo">Cairo (عربي / English)</option>
+                                <option value="almarai">Almarai (عربي)</option>
+                                <option value="noto-kufi">Noto Kufi Arabic (عربي)</option>
+                                <option value="inter">Inter (English)</option>
+                                <option value="roboto">Roboto (English)</option>
+                                <option value="poppins">Poppins (English)</option>
+                                <option value="serif">Serif (كلاسيكي)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Tab -->
+                    <div id="tab-notifications" class="stab" style="display:none;">
+                        <h3 data-i18n="notifications">الإشعارات</h3>
+                        <div class="toggle-item">
+                            <div>
+                                <strong data-i18n="sys_notif">إشعارات النظام</strong>
+                                <p data-i18n="sys_notif_desc">تحديثات وإشعارات النظام</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="systemNotifToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-item">
+                            <div>
+                                <strong data-i18n="site_notif">إشعارات الموقع</strong>
+                                <p data-i18n="site_notif_desc">رسائل من فريق الإدارة</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="adminNotifToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="form-group" style="margin-top:1rem;">
+                            <label data-i18n="notif_freq">تكرار الإشعارات</label>
+                            <select id="notifFrequency" class="form-input">
+                                <option value="always" data-i18n="freq_always">فوري</option>
+                                <option value="daily" data-i18n="freq_daily">يومي</option>
+                                <option value="weekly" data-i18n="freq_weekly">أسبوعي</option>
+                                <option value="never" data-i18n="freq_never">لا إشعارات</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Tab -->
+                    <div id="tab-social" class="stab" style="display:none;">
+                        <h3 data-i18n="social_media_title">منصات التواصل</h3>
+                        <p data-i18n="social_desc"
+                            style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.5rem;">تابعنا عبر
+                            منصاتنا الرسمية للحصول على آخر التحديثات والأخبار.</p>
+                        <div class="social-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                            <a href="https://youtube.com/@tunisiamindai?si=eJLVEuRM1UxEV-Rs" target="_blank"
+                                class="social-item"
+                                style="display: flex; align-items: center; gap: 1rem; padding: 1.25rem; background: rgba(255, 0, 0, 0.1); border: 1px solid rgba(255, 0, 0, 0.2); border-radius: 1rem; text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s;">
+                                <i class="fab fa-youtube" style="font-size: 2.2rem; color: #ff0000;"></i>
+                                <div class="social-info">
+                                    <strong style="display: block; font-size: 1.1rem;">Tunisia Mind AI</strong>
+                                    <span style="font-size: 0.82rem; opacity: 0.8;" data-i18n="youtube_sub_text">اشترك
+                                        في قناتنا على اليوتيوب</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-left" style="margin-right: auto; opacity: 0.5;"></i>
+                            </a>
+
+                            <a href="https://www.tiktok.com/@tunisia.mind.ai?_r=1&_t=ZS-94vJcL1Slqi" target="_blank"
+                                class="social-item"
+                                style="display: flex; align-items: center; gap: 1rem; padding: 1.25rem; background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(254, 44, 85, 0.2); border-radius: 1rem; text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s;">
+                                <i class="fab fa-tiktok" style="font-size: 2.2rem; color: #ffffff;"></i>
+                                <div class="social-info">
+                                    <strong style="display: block; font-size: 1.1rem;">Tunisia Mind AI</strong>
+                                    <span style="font-size: 0.82rem; opacity: 0.8;" data-i18n="tiktok_sub_text">تابعنا
+                                        على حسابنا في التيك توك</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-left" style="margin-right: auto; opacity: 0.5;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Language Tab -->
+                    <div id="tab-language" class="stab" style="display:none;">
+                        <h3 data-i18n="language">اللغة</h3>
+                        <div class="language-grid">
+                            <button class="lang-btn active" data-lang="ar" data-dir="rtl">🇹🇳 العربية</button>
+                            <button class="lang-btn" data-lang="en" data-dir="ltr">🇬🇧 English</button>
+                        </div>
+                    </div>
+
+                    <!-- Support Tab -->
+                    <div id="tab-support" class="stab" style="display:none;">
+                        <h3 data-i18n="contact_support">التواصل مع الدعم</h3>
+                        <p class="support-desc" data-i18n="support_desc">هل تواجه مشكلة؟ تواصل معنا وسيرد عليك فريقنا
+                            خلال 24 ساعة.</p>
+                        <div class="support-email-box">
+                            <i class="fa-solid fa-envelope"></i>
+                            <a href="mailto:tunisiamindai@gmail.com">tunisiamindai@gmail.com</a>
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="subject">الموضوع</label>
+                            <input type="text" id="supportSubject" class="form-input" data-i18n-placeholder="subject_ph"
+                                placeholder="موضوع رسالتك">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="message">الرسالة</label>
+                            <textarea id="supportMessage" class="form-input" rows="5" data-i18n-placeholder="message_ph"
+                                placeholder="اكتب رسالتك هنا..."></textarea>
+                        </div>
+                        <button class="btn-primary" id="sendSupportBtn" data-i18n="send">إرسال</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Modal -->
+    <div id="shareModal" class="modal-overlay">
+        <div class="small-modal">
+            <h3 data-i18n="share_chat">مشاركة المحادثة</h3>
+            <p data-i18n="share_desc">انسخ الرابط وشاركه مع من تريد</p>
+            <div class="input-action-row">
+                <input type="text" id="shareLinkInput" class="form-input" readonly>
+                <button class="btn-secondary" id="copyShareLinkBtn"><i class="fa-solid fa-copy"></i></button>
+            </div>
+            <button class="btn-secondary" onclick="document.getElementById('shareModal').style.display='none'"
+                data-i18n="close">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- Verification Modal -->
+    <div id="verificationModal" class="modal-overlay">
+        <div class="small-modal verification-card">
+            <h3 data-i18n="verify_title">توثيق الحساب</h3>
+
+            <!-- Step 1: Confirm Email -->
+            <div id="vStep1">
+                <p data-i18n="verify_step1_desc">سيتم إرسال رمز تحقق إلى بريدك الإلكتروني التالي:</p>
+                <div class="v-email-display" id="vEmailDisplay">---</div>
+                <button class="btn-primary" id="vSendCodeBtn" style="width:100%; margin-top:1rem;">
+                    <span data-i18n="next">التالي</span> <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            </div>
+
+            <!-- Step 2: Enter Code -->
+            <div id="vStep2" style="display:none;">
+                <p data-i18n="verify_step2_desc">أدخل رمز التحقق المكون من 6 أرقام:</p>
+                <div class="v-code-inputs">
+                    <input type="text" maxlength="6" id="vCodeInput" class="form-input" placeholder="000000"
+                        style="text-align:center; letter-spacing:10px; font-size:1.5rem;">
+                </div>
+                <button class="btn-primary" id="vConfirmBtn" style="width:100%; margin-top:1rem;">
+                    <span data-i18n="verify_btn">توثيق</span>
+                </button>
+                <button class="btn-text" id="vBackBtn"
+                    style="width:100%; margin-top:0.5rem; font-size:0.8rem; color:var(--text-muted);">
+                    <span data-i18n="back">رجوع</span>
+                </button>
+            </div>
+
+            <button class="btn-secondary" id="closeVModalBtn" style="margin-top:1rem; width:100%;"
+                data-i18n="close">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ===== LOGOUT MODAL ===== -->
+    <div id="logoutModal" class="modal-overlay">
+        <div class="modal-card mini-modal">
+            <h3 data-i18n="logout_confirm">هل أنت متأكد من تسجيل الخروج؟</h3>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="cancelLogoutBtn" data-i18n="back">رجوع</button>
+                <button class="btn-danger" id="confirmLogoutBtn" data-i18n="logout">تسجيل الخروج</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.min.js"></script>
+    <script src="js/translations.js?v=2.0.1" defer></script>
+    <script src="js/language.js?v=2.0.1" defer></script>
+    <script type="module" src="js/auth.js?v=2.0.1" defer></script>
+    <script src="js/api.js?v=2.0.1" defer></script>
+    <script src="js/chat.js?v=2.0.1" defer></script>
+    <script src="js/ui.js?v=2.0.1" defer></script>
+    <script src="js/settings.js?v=2.0.1" defer></script>
+    <script src="js/app.js?v=2.0.1" defer></script>
+</body>
+
+</html>

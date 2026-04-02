@@ -1,0 +1,1 @@
+// Knowledge base routes will be here
