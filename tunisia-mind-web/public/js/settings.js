@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedFont = localStorage.getItem('tunisiaFont') || 'tajawal';
     const savedLang = localStorage.getItem('tunisiaLang') || 'ar';
     const savedWallpaper = localStorage.getItem('tunisiaWallpaper') || 'none';
+    const savedResponseLen = localStorage.getItem('tm-response-len') || 'medium';
 
     applyTheme(savedTheme);
     applyAccent(savedAccent);
@@ -54,6 +55,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (fontSelect) {
         fontSelect.value = savedFont;
         fontSelect.addEventListener('change', () => applyFont(fontSelect.value));
+    }
+
+    // ===== Response Length =====
+    const responseLenSelect = document.getElementById('responseLengthSelect');
+    if (responseLenSelect) {
+        responseLenSelect.value = savedResponseLen;
+        responseLenSelect.addEventListener('change', () => {
+            localStorage.setItem('tm-response-len', responseLenSelect.value);
+        });
     }
 
     // ===== Language (Handled by language.js) =====

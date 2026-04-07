@@ -22,6 +22,10 @@
     <meta property="og:type" content="website">
     <link rel="icon" href="assets/tunisia-brain-new.jpg">
     <link rel="stylesheet" href="css/style.css">
+    
+    <!-- PDF Export Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&family=Inter:wght@300;400;500;700&family=Cairo:wght@300;400;600;700&family=Almarai:wght@300;400;700&family=Noto+Kufi+Arabic:wght@300;400;700&family=Roboto:wght@300;400;500;700&family=Poppins:wght@300;400;500;700&display=swap"
@@ -79,8 +83,6 @@
                 </button>
             </div>
 
-
-
             <!-- Pinned chats section -->
             <div class="history-section" id="pinnedSection" style="display:none;">
                 <span class="section-label" data-i18n="pinned">مثبّت</span>
@@ -97,20 +99,13 @@
                 <div class="user-info-bar" id="userInfoBar">
                     <div class="user-avatar-wrap">
                         <img id="sidebarAvatar" src="https://api.dicebear.com/7.x/initials/svg?seed=U" alt="Avatar"
-                            class="avatar-small">
+                            class="avatar-small" onerror="this.src='assets/tunisia-brain-new.jpg';">
                         <span class="online-dot"></span>
                     </div>
                     <span id="userNameDisplay" class="user-name-display">---</span>
-                    <div id="streakBadge" class="streak-badge" title="سلسلة العمل اليومي 🔥" style="display:flex; align-items:center; gap:4px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); color:#ef4444; padding:2px 8px; border-radius:12px; font-size:0.8rem; margin-inline-start:10px;">
-                        <i class="fa-solid fa-fire"></i>
-                        <span id="streakCount">0</span>
-                    </div>
                     <i class="fa-solid fa-crown" id="premiumBadge" style="color:#fbbf24; margin-right:8px; display:none;" title="Premium User"></i>
                 </div>
                 <div class="sidebar-actions">
-                    <button class="sidebar-icon-btn" id="insightsBtn" title="إحصائياتي">
-                        <i class="fa-solid fa-chart-pie"></i>
-                    </button>
                     <button class="sidebar-icon-btn" id="settingsBtn" data-i18n-title="settings" title="الإعدادات">
                         <i class="fa-solid fa-gear"></i>
                     </button>
@@ -150,6 +145,7 @@
                 </div>
 
                 <div class="header-right-actions" style="display: flex; gap: 8px; align-items: center;">
+
                     <button class="icon-btn" id="shareChatBtn" data-i18n-title="share" title="مشاركة"
                         style="display:none; font-size: 1.1rem; padding: 6px;"><i class="fa-solid fa-share-nodes"></i></button>
                 </div>
@@ -157,51 +153,47 @@
 
             <!-- Chat body -->
             <div class="chat-container" id="chatContainer">
-                <!-- Verification Banner -->
-                <div id="unverifiedBanner" class="unverified-banner" style="display:none;">
-                    <i class="fa-solid fa-triangle-exclamation"></i>
-                    <span data-i18n="unverified_msg">حسابك غير موثق حالياً.</span>
-                    <button id="verifyNowBtn" data-i18n="verify_now">اضغط هنا لتوثيقه</button>
-                </div>
+                <!-- Verification Banner Removed -->
 
                 <!-- Welcome screen -->
                 <div class="welcome-screen" id="welcomeScreen">
                     <div class="welcome-inner">
                         <div class="brand-logo">
                             <img id="welcomeLogo" src="assets/tunisia-brain-new.jpg"
-                                style="width: 120px; height: 120px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);"
-                                onerror="this.outerHTML='<div style=\'font-size: 80px; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary); border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);\'>🧠</div>'">
+                                style="width: 100px; height: 100px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);"
+                                onerror="this.outerHTML='<div style=\'font-size:70px;width:100px;height:100px;display:flex;align-items:center;justify-content:center;background:var(--bg-tertiary);border-radius:20px;\'>🧠</div>'">
                         </div>
                         <h1 id="welcomeTitle" data-i18n="welcome_title">كيف يمكنني مساعدتك اليوم؟</h1>
-                        <p class="welcome-sub" id="welcomeSub" data-i18n="welcome_sub">اسألني أي شيء، اطلب كوداً، أو
-                            ابدأ محادثة</p>
-                        <div class="suggestions-grid">
-                            <button class="suggestion-card" data-prompt="اشرح مفهوماً معقداً بشكل مبسط وجذاب">
+                        <p class="welcome-sub" id="welcomeSub" data-i18n="welcome_sub">اسألني أي شيء، اطلب كوداً، أو ابدأ محادثة</p>
+
+
+
+                        <div class="suggestions-grid" id="suggestionsGrid">
+                            <button class="suggestion-card" onclick="window._sendSuggestion('sug1')">
                                 <i class="fa-solid fa-lightbulb"></i>
                                 <span data-i18n="sug1">اشرح مفهوماً معقداً ببساطة</span>
                             </button>
-                            <button class="suggestion-card" data-prompt="ساعدني في تعلم شيء جديد اليوم">
-                                <i class="fa-solid fa-graduation-cap"></i>
-                                <span data-i18n="sug2">ساعدني في تعلم شيء جديد</span>
+                            <button class="suggestion-card" onclick="window._sendSuggestion('sug2')">
+                                <i class="fa-solid fa-code"></i>
+                                <span data-i18n="sug2">اكتب لي كوداً برمجياً</span>
                             </button>
-                            <button class="suggestion-card" data-prompt="أعطني 5 أفكار إبداعية لمشروع أو نشاط جديد">
+                            <button class="suggestion-card" onclick="window._sendSuggestion('sug3')">
                                 <i class="fa-solid fa-wand-magic-sparkles"></i>
                                 <span data-i18n="sug3">أعطني أفكاراً إبداعية</span>
                             </button>
-                            <button class="suggestion-card"
-                                data-prompt="أجب على سؤال في المعلومات العامة (علوم، تاريخ، أو جغرافيا)">
-                                <i class="fa-solid fa-earth-africa"></i>
-                                <span data-i18n="sug4">أجب على سؤال معلومات عامة</span>
+                            <button class="suggestion-card" onclick="window._sendSuggestion('sug4')">
+                                <i class="fa-solid fa-book-open"></i>
+                                <span data-i18n="sug4">لخص لي كتاباً مشهوراً</span>
                             </button>
                         </div>
                     </div>
-                </div>
+                </div> <!-- Closes welcome-screen -->
 
                 <div class="messages-wrapper" id="messagesWrapper"></div>
             </div>
 
             <!-- Input area -->
-            <div class="input-area-wrapper" id="inputAreaWrapper" style="position: sticky; bottom: 0; width: 100%; z-index: 10;">
+            <div class="input-area-wrapper" id="inputAreaWrapper">
                 
                 <!-- NEW Image Preview Area -->
                 <div id="imagePreviewContainer" style="display:none; padding: 8px; position:absolute; top:-70px; left: 15px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 4px 10px rgba(0,0,0,0.15); align-items: center; justify-content: center;">
@@ -210,19 +202,34 @@
                 </div>
                 
                 <div class="input-container" id="inputContainer">
-                    <!-- Persona Selector (Group Chat Mode) -->
-                    <select id="personaSelector" style="background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: 6px; padding: 4px; font-size: 0.8rem; outline: none; flex-shrink: 0;">
-                        <option value="العقل التونسي">🧠 العقل التونسي</option>
-                        <option value="يوسف">👨 يوسف</option>
-                        <option value="أحمد">👦 أحمد</option>
-                        <option value="ريم">👩 ريم</option>
-                        <option value="ليلى">👧 ليلى</option>
-                    </select>
-
-                    <!-- Hidden File Input for Analysis -->
-                    <input type="file" id="fileInputAlpha" style="display:none;" accept=".txt,.js,.py,.html,.css,.json,.md,.pdf">
-                    <button class="input-icon-btn" id="attachBtnAlpha" title="ارفاق ملف للتحليل" style="background:none; border:none; color:var(--text-secondary); cursor:pointer; font-size:1.2rem; padding:0 8px;">
-                        <i class="fa-solid fa-paperclip"></i>
+                    <div style="position:relative;">
+                        <button class="input-icon-btn" id="attachBtnAlpha" title="إرفاق" 
+                                style="background:var(--bg-tertiary); border:1px solid var(--border-color); color:var(--text-primary); cursor:pointer; font-size:1.1rem; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);" 
+                                onmouseover="this.style.background='var(--accent-color)'; this.style.color='white'; this.style.transform='translateY(-2px)';" 
+                                onmouseout="this.style.background='var(--bg-tertiary)'; this.style.color='var(--text-primary)'; this.style.transform='translateY(0)';"
+                                onclick="event.stopPropagation(); document.getElementById('attachMenu').classList.toggle('active');">
+                            <i class="fa-solid fa-paperclip"></i>
+                        </button>
+                        <div id="attachMenu" class="attach-menu-centered">
+                            <div class="context-menu-item" onclick="document.getElementById('fileInputAlpha').click(); this.parentElement.style.display='none';">
+                                <i class="fa-solid fa-file-code" style="color:var(--accent-color);"></i> 
+                                <span data-i18n="upload_file">رفع ملف نصي / كود</span>
+                            </div>
+                            <div class="context-menu-item" onclick="document.getElementById('imageInput').click(); this.parentElement.style.display='none';">
+                                <i class="fa-solid fa-image" style="color:#10b981;"></i> 
+                                <span data-i18n="upload_image">رفع صورة للتحليل</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Hidden File Inputs -->
+                    <input type="file" id="fileInputAlpha" style="display:none;" accept=".txt,.js,.py,.html,.css,.json,.md,.csv,.xml,.ts,.jsx,.vue,.sql">
+                    <input type="file" id="imageInput" style="display:none;" accept="image/*">
+                    <!-- Mic Button for Speech-to-Text -->
+                    <button class="input-icon-btn" id="micBtn" title="تحدث بالصوت" 
+                            style="background:var(--bg-tertiary); border:1px solid var(--border-color); color:var(--text-primary); cursor:pointer; font-size:1.1rem; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);"
+                            onmouseover="this.style.background='#ef4444'; this.style.color='white'; this.style.transform='translateY(-2px)';" 
+                            onmouseout="if(!this.classList.contains('recording')){ this.style.background='var(--bg-tertiary)'; this.style.color='var(--text-primary)'; this.style.transform='translateY(0)'; }">
+                        <i class="fa-solid fa-microphone"></i>
                     </button>
                     
                     <div class="textarea-wrap">
@@ -262,31 +269,7 @@
         </div>
     </div>
 
-    <!-- Insights Modal -->
-    <div id="insightsModal" class="modal-overlay">
-        <div class="modal-content insights-modal-content">
-            <div class="modal-header">
-                <h3><i class="fa-solid fa-chart-line"></i> إحصائياتي (Insights)</h3>
-                <button class="modal-close">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="insights-grid">
-                    <div class="insight-card">
-                        <span class="insight-label">إجمالي الرسائل</span>
-                        <span class="insight-value" id="statsTotalMsg">0</span>
-                    </div>
-                    <div class="insight-card">
-                        <span class="insight-label">الوقت الموفر (تقديرياً)</span>
-                        <span class="insight-value" id="statsTimeSaved">0 س</span>
-                    </div>
-                </div>
-                <div class="stats-chart-wrap">
-                    <canvas id="topicsChart"></canvas>
-                </div>
-                <div id="topTopicsList" class="top-topics-list"></div>
-            </div>
-        </div>
-    </div>
+    <!-- Insights Modal Removed -->
     <div id="settingsModal" class="modal-overlay">
         <div class="settings-card">
             <div class="settings-header">
@@ -393,6 +376,14 @@
                                 <option value="roboto">Roboto (English)</option>
                                 <option value="poppins">Poppins (English)</option>
                                 <option value="serif">Serif (كلاسيكي)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>طول الرد (Response Length)</label>
+                            <select id="responseLengthSelect" class="form-input">
+                                <option value="short">قصير ومختصر (Short)</option>
+                                <option value="medium" selected>موزون ومتوسط (Medium)</option>
+                                <option value="detailed">مفصل وشامل (Detailed)</option>
                             </select>
                         </div>
                     </div>
