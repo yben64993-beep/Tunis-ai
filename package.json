@@ -4,7 +4,7 @@
   "description": "Root configuration to auto-start the backend for deployment platforms",
   "license": "MIT",
   "scripts": {
-    "postinstall": "cd tunisia-mind-web && npm install",
+    "postinstall": "npm install --prefix tunisia-mind-web",
     "start": "node server.js"
   },
   "dependencies": {

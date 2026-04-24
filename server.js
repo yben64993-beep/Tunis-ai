@@ -7,4 +7,4 @@ const path = require('path');
 process.chdir(path.join(__dirname, 'tunisia-mind-web'));
 
 // تشغيل الخادم الأساسي
-require('./tunisia-mind-web/server.js');
+require('./server.js');
