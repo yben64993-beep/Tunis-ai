@@ -592,4 +592,3 @@ app.post('/api/publish-website', async (req, res) => {
 
 app.get(/.*/, (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.listen(PORT, () => console.log(`🚀 Server on port ${PORT}`));
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations)

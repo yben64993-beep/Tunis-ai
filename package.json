@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "npm install --prefix tunisia-mind-web",
-    "start": "node server.js"
+    "start": "node tunisia-mind-web/server.js"
   },
   "dependencies": {
     "express": "^4.0.0"
