@@ -41,6 +41,12 @@
     
     <!-- Chart.js for Visualization -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- PDF.js for PDF Analysis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
 </head>
 
 <body class="dark-theme">
@@ -81,6 +87,18 @@
                     <i class="fa-solid fa-plus"></i>
                     <span data-i18n="new_chat">محادثة جديدة</span>
                 </button>
+                <button class="new-chat-btn" id="openArchivesBtn" style="background:var(--bg-tertiary); color:var(--text-primary); margin-top:8px;">
+                    <i class="fa-solid fa-box-archive"></i>
+                    <span data-i18n="archives">الأرشيف</span>
+                </button>
+                <button class="new-chat-btn" id="openSavedImagesBtn" style="background:var(--bg-tertiary); color:var(--text-primary); margin-top:8px;">
+                    <i class="fa-solid fa-image"></i>
+                    <span data-i18n="saved_images">الصور المحفوظة</span>
+                </button>
+                <button class="new-chat-btn" id="openWebsiteBuilderBtn" style="background:linear-gradient(135deg, #10b981, #0ea5e9); color:white; border:none; margin-top:8px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span data-i18n="ai_websites">مواقع بالذكاء الاصطناعي</span>
+                </button>
             </div>
 
             <!-- Pinned chats section -->
@@ -89,10 +107,12 @@
                 <div id="pinnedChatsList"></div>
             </div>
 
+            <!-- Archives section removed from sidebar, now in modal -->
+
             <!-- History list from ui.js -->
             <div class="history-section">
                 <span class="section-label" data-i18n="today">اليوم</span>
-                <div class="history-list"></div>
+                <div class="history-list" id="historyList"></div>
             </div>
 
             <div class="sidebar-footer">
@@ -103,10 +123,17 @@
                         <span class="online-dot"></span>
                     </div>
                     <span id="userNameDisplay" class="user-name-display">---</span>
+<<<<<<< HEAD:tunisia-mind-web/public/index.html
                     <i class="fa-solid fa-crown" id="premiumBadge" style="color:#fbbf24; margin-right:8px; display:none;" title="Premium User"></i>
                 </div>
                 <div class="sidebar-actions">
                     <button class="sidebar-icon-btn" id="settingsBtn" data-i18n-title="settings" title="الإعدادات">
+=======
+                    <i class="fa-solid fa-crown" id="premiumBadgeSidebar" style="color:#fbbf24; margin-right:8px; display:none;" title="Premium User"></i>
+                </div>
+                <div class="sidebar-actions">
+                    <button class="sidebar-icon-btn" id="settingsBtn" title="الإعدادات">
+>>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/index.html
                         <i class="fa-solid fa-gear"></i>
                     </button>
                     <button class="sidebar-icon-btn logout-sidebar-btn" id="sidebarLogoutBtn" data-i18n-title="logout" title="تسجيل الخروج">
@@ -140,14 +167,18 @@
                         <strong id="quotaCount">100</strong>
                         <span id="quotaLabel">MSM</span>
                         <div class="quota-progress-mini"><div id="quotaProgressFill" style="width: 100%;"></div></div>
-                        <i class="fa-solid fa-crown" style="margin-left:5px; color:#fbbf24; font-size:0.75rem; display:none;" id="premiumBadge"></i>
-                </div>
+                        <i class="fa-solid fa-crown" style="margin-left:5px; color:#fbbf24; font-size:0.75rem; display:none;" id="premiumBadgeHeader"></i>
+                    </div>
                 </div>
 
                 <div class="header-right-actions" style="display: flex; gap: 8px; align-items: center;">
+<<<<<<< HEAD:tunisia-mind-web/public/index.html
 
                     <button class="icon-btn" id="shareChatBtn" data-i18n-title="share" title="مشاركة"
                         style="display:none; font-size: 1.1rem; padding: 6px;"><i class="fa-solid fa-share-nodes"></i></button>
+=======
+                    <!-- Share button removed as requested -->
+>>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/index.html
                 </div>
             </header>
 
@@ -168,6 +199,7 @@
 
 
 
+<<<<<<< HEAD:tunisia-mind-web/public/index.html
                         <div class="suggestions-grid" id="suggestionsGrid">
                             <button class="suggestion-card" onclick="window._sendSuggestion('sug1')">
                                 <i class="fa-solid fa-lightbulb"></i>
@@ -186,6 +218,9 @@
                                 <span data-i18n="sug4">لخص لي كتاباً مشهوراً</span>
                             </button>
                         </div>
+=======
+                        <!-- Suggestions Grid Removed -->
+>>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/index.html
                     </div>
                 </div> <!-- Closes welcome-screen -->
 
@@ -218,12 +253,27 @@
                             <div class="context-menu-item" onclick="document.getElementById('imageInput').click(); this.parentElement.style.display='none';">
                                 <i class="fa-solid fa-image" style="color:#10b981;"></i> 
                                 <span data-i18n="upload_image">رفع صورة للتحليل</span>
+<<<<<<< HEAD:tunisia-mind-web/public/index.html
+=======
+                            </div>
+                            <div class="context-menu-item" onclick="document.getElementById('videoInput').click(); this.parentElement.style.display='none';">
+                                <i class="fa-solid fa-video" style="color:#ef4444;"></i> 
+                                <span data-i18n="upload_video">تحليل فيديو (20ث)</span>
+>>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/index.html
                             </div>
                         </div>
                     </div>
                     <!-- Hidden File Inputs -->
+<<<<<<< HEAD:tunisia-mind-web/public/index.html
                     <input type="file" id="fileInputAlpha" style="display:none;" accept=".txt,.js,.py,.html,.css,.json,.md,.csv,.xml,.ts,.jsx,.vue,.sql">
+=======
+                    <input type="file" id="fileInputAlpha" style="display:none;" accept=".txt,.js,.py,.html,.css,.json,.md,.csv,.xml,.ts,.jsx,.vue,.sql,.pdf">
+>>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/index.html
                     <input type="file" id="imageInput" style="display:none;" accept="image/*">
+                    <input type="file" id="videoInput" style="display:none;" accept="video/*">
+                    <!-- Hidden Helper Elements for Video Processing -->
+                    <video id="hiddenVideo" style="display:none;" muted></video>
+                    <canvas id="hiddenCanvas" style="display:none;"></canvas>
                     <!-- Mic Button for Speech-to-Text -->
                     <button class="input-icon-btn" id="micBtn" title="تحدث بالصوت" 
                             style="background:var(--bg-tertiary); border:1px solid var(--border-color); color:var(--text-primary); cursor:pointer; font-size:1.1rem; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);"
@@ -249,21 +299,19 @@
     <!-- ==================== MODALS ==================== -->
 
 
-
-
-    <!-- Auth Modal -->
     <!-- Auth Modal -->
     <div id="authModal" class="modal-overlay" style="display:none;">
         <div class="auth-card" id="authCard">
             <div class="auth-logo">🧠 <span data-i18n="brand_name">العقل التونسي</span></div>
 
-            <!-- Login Only via Google -->
             <div id="loginForm">
                 <h2 data-i18n="login">تسجيل الدخول / إنشاء حساب</h2>
                 <div style="margin-top: 1.5rem; text-align: center;">
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem;">استخدم حساب Google الخاص بك للدخول إلى المنصة فوراً وبأمان.</p>
-                    <button class="btn-google" id="googleLoginBtn"><i class="fa-brands fa-google"></i> <span
-                            data-i18n="google_login">المتابعة باستخدام Google</span></button>
+                    <button class="btn-google" id="googleLoginBtn">
+                        <i class="fa-brands fa-google"></i> 
+                        <span data-i18n="google_login">المتابعة باستخدام Google</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -350,32 +398,25 @@
                         <div class="form-group">
                             <label data-i18n="accent_color">لون التمييز</label>
                             <div class="accent-color-picker">
-                                <button class="accent-btn active" data-color="#10b981"
-                                    style="background:#10b981;"></button>
+                                <button class="accent-btn active" data-color="#10b981" style="background:#10b981;"></button>
                                 <button class="accent-btn" data-color="#3b82f6" style="background:#3b82f6;"></button>
                                 <button class="accent-btn" data-color="#8b5cf6" style="background:#8b5cf6;"></button>
                                 <button class="accent-btn" data-color="#f59e0b" style="background:#f59e0b;"></button>
                                 <button class="accent-btn" data-color="#ef4444" style="background:#ef4444;"></button>
+                                <button class="accent-btn" data-color="#14b8a6" style="background:#14b8a6;"></button>
+                                <button class="accent-btn" data-color="#ec4899" style="background:#ec4899;"></button>
+                                <button class="accent-btn" data-color="#06b6d4" style="background:#06b6d4;"></button>
+                                <button class="accent-btn" data-color="#db2777" style="background:#db2777;"></button>
+                                <button class="accent-btn" data-color="#84cc16" style="background:#84cc16;"></button>
                             </div>
                         </div>
+
                         <div class="form-group">
-                            <label><i class="fa-solid fa-image"></i> <span data-i18n="backgrounds">خلفيات 4K
-                                    مذهلة</span></label>
-                            <div id="backgroundGrid" class="background-grid">
-                                <!-- سيتم توليدها برمجياً من ui.js -->
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label data-i18n="font_family">نوع الخط</label>
-                            <select id="fontFamilySelect" class="form-input">
-                                <option value="tajawal" data-i18n="default_font">Tajawal (افتراضي)</option>
-                                <option value="cairo">Cairo (عربي / English)</option>
-                                <option value="almarai">Almarai (عربي)</option>
-                                <option value="noto-kufi">Noto Kufi Arabic (عربي)</option>
-                                <option value="inter">Inter (English)</option>
-                                <option value="roboto">Roboto (English)</option>
-                                <option value="poppins">Poppins (English)</option>
-                                <option value="serif">Serif (كلاسيكي)</option>
+                            <label>طول الرد (Response Length)</label>
+                            <select id="responseLengthSelect" class="form-input">
+                                <option value="short">قصير ومختصر (Short)</option>
+                                <option value="medium" selected>موزون ومتوسط (Medium)</option>
+                                <option value="detailed">مفصل وشامل (Detailed)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -390,7 +431,25 @@
 
                     <!-- Notifications Tab -->
                     <div id="tab-notifications" class="stab" style="display:none;">
-                        <h3 data-i18n="notifications">الإشعارات</h3>
+                        <h3 data-i18n="notifications">مميزات العقل التونسي 🚀</h3>
+                        
+                        <div class="features-list-scroll" id="notificationsList" style="margin-bottom: 20px;">
+                            <div class="feature-card-mini notification-item" id="notif-1" style="background:var(--bg-tertiary); padding:15px; border-radius:12px; margin-bottom:10px; border-right:4px solid var(--accent-color); position:relative;">
+                                <button onclick="this.parentElement.style.display='none'; localStorage.setItem('tm-notif-1', 'read');" style="position:absolute; left:10px; top:10px; background:none; border:none; color:var(--text-secondary); cursor:pointer;"><i class="fa-solid fa-check"></i></button>
+                                <strong style="display:block; margin-bottom:5px; color:var(--accent-color);">🌟 تحديث جديد قادم!</strong>
+                                <p style="font-size:0.85rem; color:var(--text-secondary);">ترقبوا ميزات صناعة الصور الاحترافية المدمجة وتحليل مقاطع الفيديو في التحديث القادم.</p>
+                            </div>
+                            <div class="feature-card-mini" style="background:var(--bg-tertiary); padding:15px; border-radius:12px; margin-bottom:10px; border-right:4px solid #10b981;">
+                                <strong style="display:block; margin-bottom:5px; color:#10b981;">🎨 توليد صور احترافية</strong>
+                                <p style="font-size:0.85rem; color:var(--text-secondary);">اطلب منه "ارسم..." وسيقوم بإنشاء صور فنية ومدهشة فوراً.</p>
+                            </div>
+                        </div>
+                        <script>
+                            if(localStorage.getItem('tm-notif-1') === 'read') {
+                                document.getElementById('notif-1').style.display = 'none';
+                            }
+                        </script>
+
                         <div class="toggle-item">
                             <div>
                                 <strong data-i18n="sys_notif">إشعارات النظام</strong>
@@ -400,25 +459,6 @@
                                 <input type="checkbox" id="systemNotifToggle" checked>
                                 <span class="toggle-slider"></span>
                             </label>
-                        </div>
-                        <div class="toggle-item">
-                            <div>
-                                <strong data-i18n="site_notif">إشعارات الموقع</strong>
-                                <p data-i18n="site_notif_desc">رسائل من فريق الإدارة</p>
-                            </div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="adminNotifToggle" checked>
-                                <span class="toggle-slider"></span>
-                            </label>
-                        </div>
-                        <div class="form-group" style="margin-top:1rem;">
-                            <label data-i18n="notif_freq">تكرار الإشعارات</label>
-                            <select id="notifFrequency" class="form-input">
-                                <option value="always" data-i18n="freq_always">فوري</option>
-                                <option value="daily" data-i18n="freq_daily">يومي</option>
-                                <option value="weekly" data-i18n="freq_weekly">أسبوعي</option>
-                                <option value="never" data-i18n="freq_never">لا إشعارات</option>
-                            </select>
                         </div>
                     </div>
 
@@ -444,7 +484,7 @@
                             <a href="https://www.tiktok.com/@tunisia.mind.ai?_r=1&_t=ZS-94vJcL1Slqi" target="_blank"
                                 class="social-item"
                                 style="display: flex; align-items: center; gap: 1rem; padding: 1.25rem; background: rgba(0, 242, 254, 0.1); border: 1px solid rgba(254, 44, 85, 0.2); border-radius: 1rem; text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s;">
-                                <i class="fab fa-tiktok" style="font-size: 2.2rem; color: #ffffff;"></i>
+                                <i class="fab fa-tiktok" style="font-size: 2.2rem; color: var(--text-primary);"></i>
                                 <div class="social-info">
                                     <strong style="display: block; font-size: 1.1rem;">Tunisia Mind AI</strong>
                                     <span style="font-size: 0.82rem; opacity: 0.8;" data-i18n="tiktok_sub_text">تابعنا
@@ -486,9 +526,14 @@
                         <button class="btn-primary" id="sendSupportBtn" data-i18n="send">إرسال</button>
                     </div>
 
-                </div>
-            </div>
-        </div>
+                </div> <!-- Closes settings-content -->
+            </div> <!-- Closes settings-layout -->
+        </div> <!-- Closes settings-card -->
+    </div> <!-- Closes settingsModal -->
+    <!-- Image Lightbox Modal -->
+    <div id="imageLightbox" class="image-lightbox">
+        <button class="image-lightbox-close" onclick="closeLightbox()">&times;</button>
+        <img id="lightboxImg" src="" alt="Full Screen Image">
     </div>
 
     <!-- Share Modal -->
@@ -504,41 +549,106 @@
                 data-i18n="close">إغلاق</button>
         </div>
     </div>
-
-    <!-- Verification Modal -->
-    <div id="verificationModal" class="modal-overlay">
-        <div class="small-modal verification-card">
-            <h3 data-i18n="verify_title">توثيق الحساب</h3>
-
-            <!-- Step 1: Confirm Email -->
-            <div id="vStep1">
-                <p data-i18n="verify_step1_desc">سيتم إرسال رمز تحقق إلى بريدك الإلكتروني التالي:</p>
-                <div class="v-email-display" id="vEmailDisplay">---</div>
-                <button class="btn-primary" id="vSendCodeBtn" style="width:100%; margin-top:1rem;">
-                    <span data-i18n="next">التالي</span> <i class="fa-solid fa-arrow-left"></i>
-                </button>
+    <!-- Archive Modal -->
+    <div id="archiveModal" class="modal-overlay" style="display:none;">
+        <div class="settings-card" style="max-height: 80vh; display: flex; flex-direction: column;">
+            <div class="settings-header">
+                <h2 data-i18n="archives">الأرشيف</h2>
+                <button class="icon-btn modal-close" id="closeArchiveBtn"><i class="fa-solid fa-xmark"></i></button>
             </div>
-
-            <!-- Step 2: Enter Code -->
-            <div id="vStep2" style="display:none;">
-                <p data-i18n="verify_step2_desc">أدخل رمز التحقق المكون من 6 أرقام:</p>
-                <div class="v-code-inputs">
-                    <input type="text" maxlength="6" id="vCodeInput" class="form-input" placeholder="000000"
-                        style="text-align:center; letter-spacing:10px; font-size:1.5rem;">
-                </div>
-                <button class="btn-primary" id="vConfirmBtn" style="width:100%; margin-top:1rem;">
-                    <span data-i18n="verify_btn">توثيق</span>
-                </button>
-                <button class="btn-text" id="vBackBtn"
-                    style="width:100%; margin-top:0.5rem; font-size:0.8rem; color:var(--text-muted);">
-                    <span data-i18n="back">رجوع</span>
-                </button>
+            <div class="settings-content" style="flex:1; overflow-y:auto; padding: 15px; min-height: 200px;">
+                <div id="archivedChatsList"></div>
             </div>
-
-            <button class="btn-secondary" id="closeVModalBtn" style="margin-top:1rem; width:100%;"
-                data-i18n="close">إغلاق</button>
         </div>
     </div>
+
+    <!-- Saved Images Modal -->
+    <div id="savedImagesModal" class="modal-overlay" style="display:none;">
+        <div class="settings-card" style="max-height: 85vh; display: flex; flex-direction: column; width: 90%; max-width: 800px;">
+            <div class="settings-header">
+                <h2 data-i18n="saved_images">المعرض - الصور المحفوظة</h2>
+                <button class="icon-btn modal-close" id="closeSavedImagesBtn"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="settings-content" style="flex:1; overflow-y:auto; padding: 20px;">
+                <div id="savedImagesGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px;">
+                    <!-- New images go here -->
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Website Builder Modal -->
+    <div id="websiteBuilderModal" class="modal-overlay" style="display:none;">
+        <div class="settings-card" style="max-height: 90vh; display: flex; flex-direction: column; width: 90%; max-width: 600px;">
+            <div class="settings-header" style="background: linear-gradient(135deg, #10b981, #0ea5e9); border-radius: 12px 12px 0 0;">
+                <h2 style="color: white;"><i class="fa-solid fa-wand-magic-sparkles"></i> <span data-i18n="website_builder">صانع المواقع الذكي</span></h2>
+                <button class="icon-btn modal-close" id="closeWebsiteBuilderBtn" style="color: white;"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="settings-content" style="flex:1; overflow-y:auto; padding: 25px;">
+                <div class="website-tabs" style="display: flex; gap: 10px; margin-bottom: 20px; background: var(--bg-tertiary); padding: 5px; border-radius: 10px;">
+                    <button id="wb-tab-create" class="snav-btn active" style="flex: 1; text-align: center; border-radius: 8px;">إنشاء موقع جديد</button>
+                    <button id="wb-tab-edit" class="snav-btn" style="flex: 1; text-align: center; border-radius: 8px;">تعديل موقع سابق</button>
+                </div>
+
+                <!-- Create Mode -->
+                <div id="wb-create-form">
+                    <div class="form-group">
+                        <label>وصف الموقع <span style="color:#ef4444">*</span></label>
+                        <textarea id="wb-create-prompt" class="form-input" rows="5" placeholder="مثال: اصنع لي موقعاً لمطعم تونسي يقدم المأكولات التقليدية مع قائمة طعام وأسعار..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم الموقع (اختياري، بالإنجليزية بدون مسافات)</label>
+                        <input type="text" id="wb-create-slug" class="form-input" placeholder="مثال: my-tunisian-restaurant">
+                    </div>
+                </div>
+
+                <!-- Edit Mode -->
+                <div id="wb-edit-form" style="display: none;">
+                    <div class="form-group">
+                        <label>اسم الموقع (Slug) <span style="color:#ef4444">*</span></label>
+                        <input type="text" id="wb-edit-slug" class="form-input" placeholder="اكتب اسم الموقع الذي تريد تعديله...">
+                    </div>
+                    <div class="form-group">
+                        <label>طلب التعديل <span style="color:#ef4444">*</span></label>
+                        <textarea id="wb-edit-prompt" class="form-input" rows="5" placeholder="مثال: اجعل ألوان الموقع سوداء وذهبية..."></textarea>
+                    </div>
+                </div>
+
+                <div id="wb-result-area" style="display: none; margin-top: 20px; padding: 15px; border-radius: 10px; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3);">
+                    <h4 style="color: #10b981; margin-bottom: 10px;"><i class="fa-solid fa-circle-check"></i> تمت العملية بنجاح!</h4>
+                    <p id="wb-result-message" style="font-size: 0.9rem; margin-bottom: 10px;"></p>
+                    <a id="wb-result-link" href="#" target="_blank" class="btn-primary" style="display: inline-block; text-align: center; text-decoration: none;"><i class="fa-solid fa-arrow-up-right-from-square"></i> فتح الموقع في صفحة جديدة</a>
+                </div>
+
+                <div id="wb-error-area" style="display: none; margin-top: 20px; padding: 15px; border-radius: 10px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <h4 style="color: #ef4444; margin-bottom: 5px;"><i class="fa-solid fa-circle-exclamation"></i> خطأ</h4>
+                    <p id="wb-error-message" style="font-size: 0.9rem; color: #ef4444; margin: 0;"></p>
+                </div>
+
+                <button id="wb-submit-btn" class="btn-primary" style="width: 100%; margin-top: 20px; font-size: 1.1rem; padding: 12px; background: linear-gradient(135deg, #10b981, #0ea5e9); border: none;">
+                    <i class="fa-solid fa-rocket"></i> <span>تنفيذ الطلب</span>
+                </button>
+                <div id="wb-loading" style="display: none; text-align: center; margin-top: 20px;">
+                    <div class="loader" style="border: 3px solid rgba(16, 185, 129, 0.3); border-top: 3px solid #10b981; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 10px;"></div>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem;">جاري معالجة طلبك، قد يستغرق هذا بضع ثوانٍ...</p>
+                </div>
+                <style>
+                    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                </style>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Welcome Message -->
+    <div id="floatingWelcome" class="floating-welcome-snack" style="display:none;">
+        <div class="snack-content">
+            <span data-i18n="welcome_discover">مرحباً! انقر لرؤية مميزات الموقع الجديدة 🚀</span>
+        </div>
+        <button id="discoverFeaturesBtn" class="snack-btn">اكتشف</button>
+        <button id="closeFloatingBtn" class="snack-close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
 
     <!-- Toast notification -->
     <div id="toast" class="toast"></div>

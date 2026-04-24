@@ -1,0 +1,20 @@
+﻿* a811897 Initial commit without secrets
+* d989395 Update Sidebar: move chat action buttons to 3-dots dropdown menu, add chat export AI support.
+* e0f439c Update project
+* 9ec5dbd ≡ƒÜÇ Premium Zero-Ads Experience - Clean Codebase Update
+* 2d47877 Removed search button, fixed image preview clearing, and hidden suggestions after selection.
+* 8418004 Completely removed all advertisements and fixed sidebar layout issues.
+* c33bba8 Simplified platform: Google Auth only, Llama AI model, removed image/video features, and updated API key.
+* cf0f11c ╪Ñ╪╡┘ä╪º╪¡ ╪«╪╖╪ú ╪º┘ä┘ê┘â┘è┘ä ╪¿╪¬╪╡╪¡┘è╪¡ ╪º╪│┘à ┘à┘ê╪»┘è┘ä Gemini ┘ê╪¬╪¡╪│┘è┘å ┘å╪╕╪º┘à ╪¬╪¬╪¿╪╣ ╪º┘ä╪ú╪«╪╖╪º╪í
+* 3886b66 ╪Ñ┘è┘é╪º┘ü ╪º┘ä╪Ñ╪╣┘ä╪º┘å╪º╪¬ ╪¬┘à╪º┘à╪º┘ï ╪¿┘å╪º╪í┘ï ╪╣┘ä┘ë ╪╖┘ä╪¿ ╪º┘ä┘à╪│╪¬╪«╪»┘à ┘ê╪¬┘å╪╕┘è┘ü ╪º┘ä╪ú┘â┘ê╪º╪»
+* aae12f4 ╪¬╪¡╪»┘è╪½ ┘ê╪º╪¼┘ç╪⌐ ╪º┘ä╪»╪«┘ê┘ä (Google ONLY)╪î ┘ê╪¬╪╖┘ê┘è╪▒ ┘å╪╕╪º┘à ╪Ñ┘å╪┤╪º╪í ╪º┘ä┘à╪┤╪º╪▒┘è╪╣ ╪º┘ä╪░┘â┘è ┘à╪╣ ┘à┘è╪▓╪⌐ ╪º┘ä┘à╪╣╪º┘è┘å╪⌐ ╪º┘ä┘à╪¿╪º╪┤╪▒╪⌐
+* 5e55c70 fix: Improve project workspace UI, file tree visibility, toggle panel, 50 DEV points, consistent class naming
+* 71a8252 feat: Add full AI Project Generator, Monaco IDE, and Project Workspace features
+* e6e5a6e Enhance AI with Agentic tools, personalized memory and creator identity
+* 73675a6 Remove email verification, fix password reset via firebase method, update AI language flexibility and improve mobile input view
+* 7d25593 Fix email verification and improve mobile UI responsiveness
+* 5e2174d feat: Add self-ping keep-alive to prevent sleep on Render
+* e67f585 Add Google Search Console verification file
+* 53e2536 Fix mobile sidebar overlapping bug in RTL mode
+* 9f5c5f7 Hide verification and password reset for Google users
+* 376c930 SEO tags, Image preview in chat, Google Auth Age fetching

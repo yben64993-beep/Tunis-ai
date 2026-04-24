@@ -4,6 +4,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const stringSimilarity = require('string-similarity');
 
 let knowledgeBase = [];
 const KB_PATH = path.join(__dirname, 'knowledge.json');
@@ -27,15 +28,21 @@ function searchKnowledgeBase(query) {
     if (!query || typeof query !== 'string') return null;
     const normalizedQuery = query.toLowerCase().trim();
 
-    // لا نعترض الرسائل الطويلة (أكثر من 6 كلمات) — نتركها للذكاء الاصطناعي
+    // تم إزالة التقييد الصارم للكلمات للسماح بالاسئلة الطويلة
     const wordCount = normalizedQuery.split(/\s+/).length;
-    if (wordCount > 6) return null;
 
     for (const item of knowledgeBase) {
         if (!item.keywords || !Array.isArray(item.keywords)) continue;
 
-        const matched = item.keywords.some(k => normalizedQuery.includes(k.toLowerCase()));
-        if (!matched) continue;
+        // Smart Semantic Matching (Fuzzy Search) 🧠
+        // We find the best match between the query and the items' keywords
+        const matches = stringSimilarity.findBestMatch(normalizedQuery, item.keywords);
+        const bestMatch = matches.bestMatch;
+        
+        // Threshold: 0.6 similarity score to avoid false positives
+        const isMatched = bestMatch.rating > 0.6 || item.keywords.some(k => normalizedQuery.includes(k.toLowerCase()));
+        
+        if (!isMatched) continue;
 
         // معالجة الأنواع الديناميكية
         if (item.type === 'dynamic') {

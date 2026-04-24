@@ -1,17 +1,15 @@
 {
-  "name": "tunisia-mind-web",
+  "name": "tunisia-mind-root",
   "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "description": "Root configuration to auto-start the backend for deployment platforms",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "cd tunisia-mind-web && npm install",
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
   "dependencies": {
+<<<<<<< HEAD
+    "express": "^4.0.0"
+=======
     "body-parser": "^1.20.3",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -20,9 +18,12 @@
     "express-rate-limit": "^8.3.1",
     "firebase-admin": "^13.7.0",
     "helmet": "^8.1.0",
+    "http-proxy-middleware": "^3.0.5",
     "mathjs": "^15.1.1",
     "node-fetch": "^3.3.2",
     "nodemailer": "^8.0.3",
+    "sharp": "^0.34.5",
     "string-similarity": "^4.0.4"
+>>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations)
   }
 }

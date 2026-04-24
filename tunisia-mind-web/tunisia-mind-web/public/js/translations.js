@@ -15,10 +15,7 @@ const translations = {
         delete: "حذف",
         welcome_title: "كيف يمكنني مساعدتك اليوم؟",
         welcome_sub: "اسألني أي شيء، اطلب كوداً، أو ابدأ محادثة",
-        sug1: "اشرح مفهوماً معقداً ببساطة",
-        sug2: "ساعدني في تعلم شيء جديد",
-        sug3: "أعطني أفكاراً إبداعية",
-        sug4: "أجب على سؤال معلومات عامة",
+// messages removed
         type_message: "اكتب رسالتك لـ \"العقل التونسي\" هنا...",
         messages_used: "الرسائل المستخدمة:",
         login: "تسجيل الدخول",
@@ -78,14 +75,11 @@ const translations = {
         dark: "ليلي",
         light: "نهاري",
         accent_color: "لون التمييز",
-        font_family: "نوع الخط",
-        default_font: "Tajawal (افتراضي)",
+
         font_size: "حجم الخط:",
         site_bg: "خلفية الموقع",
         sys_notif: "إشعارات النظام",
         sys_notif_desc: "تحديثات وإشعارات النظام",
-        site_notif: "إشعارات الموقع",
-        site_notif_desc: "رسائل من فريق الإدارة",
         notif_freq: "تكرار الإشعارات",
         freq_always: "فوري",
         freq_daily: "يومي",
@@ -127,7 +121,13 @@ const translations = {
         social_media: "تواصل اجتماعي",
         social_desc: "تابعنا عبر منصاتنا الرسمية للحصول على آخر التحديثات والأخبار.",
         youtube_sub_text: "اشترك في قناتنا على اليوتيوب",
-        admin_panel: "لوحة الإدارة"
+        archive: "أرشفة",
+        archives: "الأرشيف",
+        thinking: "يفكر...",
+        saved_images: "الصور المحفوظة",
+        welcome_discover: "مرحباً! انقر لرؤية مميزات الموقع الجديدة 🚀",
+        website_builder: "صانع المواقع الذكي",
+        ai_websites: "مواقع بالذكاء الاصطناعي"
     },
     en: {
         dir: "ltr",
@@ -143,10 +143,7 @@ const translations = {
         delete: "Delete",
         welcome_title: "How can I assist you today?",
         welcome_sub: "Ask me anything, request code, or start a chat",
-        sug1: "Explain a complex concept",
-        sug2: "Help me learn something new",
-        sug3: "Give me creative ideas",
-        sug4: "General Information",
+// messages removed
         type_message: "Type your message to \"Tunisia Mind\" here...",
         messages_used: "Messages used:",
         login: "Log In",
@@ -206,14 +203,11 @@ const translations = {
         dark: "Dark",
         light: "Light",
         accent_color: "Accent Color",
-        font_family: "Font Family",
-        default_font: "Tajawal (Default)",
+
         font_size: "Font Size:",
         site_bg: "Site Background",
         sys_notif: "System Notifications",
         sys_notif_desc: "System updates and alerts",
-        site_notif: "Site Notifications",
-        site_notif_desc: "Messages from admin team",
         notif_freq: "Notification Frequency",
         freq_always: "Immediate",
         freq_daily: "Daily",
@@ -257,7 +251,12 @@ const translations = {
         youtube_sub_text: "Subscribe to our YouTube channel",
         tiktok_sub_text: "Follow us on TikTok",
         back_to_chat: "← Back to Chat",
-        admin_panel: "Admin Panel"
+        archive: "Archive",
+        thinking: "Thinking...",
+        saved_images: "Saved Images",
+        welcome_discover: "Hello! Click to see new features 🚀",
+        website_builder: "Smart Website Builder",
+        ai_websites: "AI Websites"
     },
     fr: {
         dir: "ltr",
@@ -273,10 +272,7 @@ const translations = {
         delete: "Supprimer",
         welcome_title: "Comment puis-je vous aider?",
         welcome_sub: "Posez vos questions ou commencez un chat",
-        sug1: "Expliquer un concept",
-        sug2: "Apprendre du nouveau",
-        sug3: "Idées créatives",
-        sug4: "Informations générales",
+// messages removed
         type_message: "Écrivez ici...",
         messages_used: "Messages utilisés:",
         login: "Connexion",
@@ -334,7 +330,14 @@ const translations = {
         social_desc: "Suivez nos plateformes officielles pour les dernières nouvelles.",
         youtube_sub_text: "Abonnez-vous à notre chaîne YouTube",
         tiktok_sub_text: "Suivez-nous sur TikTok",
-        back_to_chat: "← Retour au chat"
+        archives: "Archives",
+        archive: "Archive",
+        thinking: "Réflexion...",
+        back_to_chat: "← Retour au chat",
+        saved_images: "Images Enregistrées",
+        welcome_discover: "Bonjour! Cliquez pour voir les nouveautés 🚀",
+        website_builder: "Créateur de sites intelligent",
+        ai_websites: "Sites IA"
     },
 
     es: {
