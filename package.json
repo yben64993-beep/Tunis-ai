@@ -2,6 +2,7 @@
   "name": "tunisia-mind-root",
   "version": "1.0.0",
   "description": "Root configuration to auto-start the backend for deployment platforms",
+  "license": "MIT",
   "scripts": {
     "postinstall": "cd tunisia-mind-web && npm install",
     "start": "node server.js"
