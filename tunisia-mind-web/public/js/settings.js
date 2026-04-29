@@ -6,10 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('tunisiaTheme') || 'dark';
     const savedAccent = localStorage.getItem('tunisiaAccent') || '#10b981';
     const savedLang = localStorage.getItem('tunisiaLang') || 'ar';
-<<<<<<< HEAD:tunisia-mind-web/public/js/settings.js
-    const savedWallpaper = localStorage.getItem('tunisiaWallpaper') || 'none';
-=======
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/settings.js
+
     const savedResponseLen = localStorage.getItem('tm-response-len') || 'medium';
 
     applyTheme(savedTheme);
@@ -52,15 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
-
-    // ===== Response Length =====
-    const responseLenSelect = document.getElementById('responseLengthSelect');
-    if (responseLenSelect) {
-        responseLenSelect.value = savedResponseLen;
-        responseLenSelect.addEventListener('change', () => {
-            localStorage.setItem('tm-response-len', responseLenSelect.value);
-        });
-    }
 
     // ===== Response Length =====
     const responseLenSelect = document.getElementById('responseLengthSelect');

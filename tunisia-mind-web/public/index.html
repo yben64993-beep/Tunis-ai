@@ -123,17 +123,10 @@
                         <span class="online-dot"></span>
                     </div>
                     <span id="userNameDisplay" class="user-name-display">---</span>
-<<<<<<< HEAD:tunisia-mind-web/public/index.html
-                    <i class="fa-solid fa-crown" id="premiumBadge" style="color:#fbbf24; margin-right:8px; display:none;" title="Premium User"></i>
-                </div>
-                <div class="sidebar-actions">
-                    <button class="sidebar-icon-btn" id="settingsBtn" data-i18n-title="settings" title="الإعدادات">
-=======
                     <i class="fa-solid fa-crown" id="premiumBadgeSidebar" style="color:#fbbf24; margin-right:8px; display:none;" title="Premium User"></i>
                 </div>
                 <div class="sidebar-actions">
                     <button class="sidebar-icon-btn" id="settingsBtn" title="الإعدادات">
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/index.html
                         <i class="fa-solid fa-gear"></i>
                     </button>
                     <button class="sidebar-icon-btn logout-sidebar-btn" id="sidebarLogoutBtn" data-i18n-title="logout" title="تسجيل الخروج">
@@ -171,15 +164,7 @@
                     </div>
                 </div>
 
-                <div class="header-right-actions" style="display: flex; gap: 8px; align-items: center;">
-<<<<<<< HEAD:tunisia-mind-web/public/index.html
-
-                    <button class="icon-btn" id="shareChatBtn" data-i18n-title="share" title="مشاركة"
-                        style="display:none; font-size: 1.1rem; padding: 6px;"><i class="fa-solid fa-share-nodes"></i></button>
-=======
-                    <!-- Share button removed as requested -->
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/index.html
-                </div>
+                <!-- Share button removed as requested -->
             </header>
 
             <!-- Chat body -->
@@ -197,30 +182,7 @@
                         <h1 id="welcomeTitle" data-i18n="welcome_title">كيف يمكنني مساعدتك اليوم؟</h1>
                         <p class="welcome-sub" id="welcomeSub" data-i18n="welcome_sub">اسألني أي شيء، اطلب كوداً، أو ابدأ محادثة</p>
 
-
-
-<<<<<<< HEAD:tunisia-mind-web/public/index.html
-                        <div class="suggestions-grid" id="suggestionsGrid">
-                            <button class="suggestion-card" onclick="window._sendSuggestion('sug1')">
-                                <i class="fa-solid fa-lightbulb"></i>
-                                <span data-i18n="sug1">اشرح مفهوماً معقداً ببساطة</span>
-                            </button>
-                            <button class="suggestion-card" onclick="window._sendSuggestion('sug2')">
-                                <i class="fa-solid fa-code"></i>
-                                <span data-i18n="sug2">اكتب لي كوداً برمجياً</span>
-                            </button>
-                            <button class="suggestion-card" onclick="window._sendSuggestion('sug3')">
-                                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                <span data-i18n="sug3">أعطني أفكاراً إبداعية</span>
-                            </button>
-                            <button class="suggestion-card" onclick="window._sendSuggestion('sug4')">
-                                <i class="fa-solid fa-book-open"></i>
-                                <span data-i18n="sug4">لخص لي كتاباً مشهوراً</span>
-                            </button>
-                        </div>
-=======
                         <!-- Suggestions Grid Removed -->
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/index.html
                     </div>
                 </div> <!-- Closes welcome-screen -->
 
@@ -236,56 +198,48 @@
                     <img id="imagePreviewImg" src="" style="height: 50px; border-radius: 6px; display: block; object-fit: cover;">
                 </div>
                 
+                <!-- Hidden File Inputs & Helpers (outside flex flow) -->
+                <input type="file" id="fileInputAlpha" style="display:none;" accept=".txt,.js,.py,.html,.css,.json,.md,.csv,.xml,.ts,.jsx,.vue,.sql,.pdf">
+                <input type="file" id="imageInput" style="display:none;" accept="image/*">
+                <input type="file" id="videoInput" style="display:none;" accept="video/*">
+                <video id="hiddenVideo" style="display:none;" muted></video>
+                <canvas id="hiddenCanvas" style="display:none;"></canvas>
+
                 <div class="input-container" id="inputContainer">
-                    <div style="position:relative;">
-                        <button class="input-icon-btn" id="attachBtnAlpha" title="إرفاق" 
-                                style="background:var(--bg-tertiary); border:1px solid var(--border-color); color:var(--text-primary); cursor:pointer; font-size:1.1rem; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);" 
-                                onmouseover="this.style.background='var(--accent-color)'; this.style.color='white'; this.style.transform='translateY(-2px)';" 
-                                onmouseout="this.style.background='var(--bg-tertiary)'; this.style.color='var(--text-primary)'; this.style.transform='translateY(0)';"
+                    <!-- Attach button with dropdown -->
+                    <div style="position:relative; flex-shrink:0;">
+                        <button class="input-icon-btn" id="attachBtnAlpha" title="إرفاق"
                                 onclick="event.stopPropagation(); document.getElementById('attachMenu').classList.toggle('active');">
                             <i class="fa-solid fa-paperclip"></i>
                         </button>
                         <div id="attachMenu" class="attach-menu-centered">
-                            <div class="context-menu-item" onclick="document.getElementById('fileInputAlpha').click(); this.parentElement.style.display='none';">
-                                <i class="fa-solid fa-file-code" style="color:var(--accent-color);"></i> 
+                            <div class="context-menu-item" onclick="document.getElementById('fileInputAlpha').click(); this.parentElement.classList.remove('active');">
+                                <i class="fa-solid fa-file-code" style="color:var(--accent-color);"></i>
                                 <span data-i18n="upload_file">رفع ملف نصي / كود</span>
                             </div>
-                            <div class="context-menu-item" onclick="document.getElementById('imageInput').click(); this.parentElement.style.display='none';">
-                                <i class="fa-solid fa-image" style="color:#10b981;"></i> 
+                            <div class="context-menu-item" onclick="document.getElementById('imageInput').click(); this.parentElement.classList.remove('active');">
+                                <i class="fa-solid fa-image" style="color:#10b981;"></i>
                                 <span data-i18n="upload_image">رفع صورة للتحليل</span>
-<<<<<<< HEAD:tunisia-mind-web/public/index.html
-=======
                             </div>
-                            <div class="context-menu-item" onclick="document.getElementById('videoInput').click(); this.parentElement.style.display='none';">
-                                <i class="fa-solid fa-video" style="color:#ef4444;"></i> 
+                            <div class="context-menu-item" onclick="document.getElementById('videoInput').click(); this.parentElement.classList.remove('active');">
+                                <i class="fa-solid fa-video" style="color:#ef4444;"></i>
                                 <span data-i18n="upload_video">تحليل فيديو (20ث)</span>
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/index.html
                             </div>
                         </div>
                     </div>
-                    <!-- Hidden File Inputs -->
-<<<<<<< HEAD:tunisia-mind-web/public/index.html
-                    <input type="file" id="fileInputAlpha" style="display:none;" accept=".txt,.js,.py,.html,.css,.json,.md,.csv,.xml,.ts,.jsx,.vue,.sql">
-=======
-                    <input type="file" id="fileInputAlpha" style="display:none;" accept=".txt,.js,.py,.html,.css,.json,.md,.csv,.xml,.ts,.jsx,.vue,.sql,.pdf">
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/index.html
-                    <input type="file" id="imageInput" style="display:none;" accept="image/*">
-                    <input type="file" id="videoInput" style="display:none;" accept="video/*">
-                    <!-- Hidden Helper Elements for Video Processing -->
-                    <video id="hiddenVideo" style="display:none;" muted></video>
-                    <canvas id="hiddenCanvas" style="display:none;"></canvas>
-                    <!-- Mic Button for Speech-to-Text -->
-                    <button class="input-icon-btn" id="micBtn" title="تحدث بالصوت" 
-                            style="background:var(--bg-tertiary); border:1px solid var(--border-color); color:var(--text-primary); cursor:pointer; font-size:1.1rem; width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);"
-                            onmouseover="this.style.background='#ef4444'; this.style.color='white'; this.style.transform='translateY(-2px)';" 
-                            onmouseout="if(!this.classList.contains('recording')){ this.style.background='var(--bg-tertiary)'; this.style.color='var(--text-primary)'; this.style.transform='translateY(0)'; }">
+
+                    <!-- Mic button -->
+                    <button class="input-icon-btn" id="micBtn" title="تحدث بالصوت" style="flex-shrink:0;">
                         <i class="fa-solid fa-microphone"></i>
                     </button>
-                    
+
+                    <!-- Textarea -->
                     <div class="textarea-wrap">
                         <textarea id="messageInput" data-i18n-placeholder="type_message"
                             placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
                     </div>
+
+                    <!-- Send button -->
                     <button class="send-btn" id="sendMessageBtn">
                         <i class="fa-solid fa-paper-plane"></i>
                     </button>

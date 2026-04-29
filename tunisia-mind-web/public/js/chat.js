@@ -15,22 +15,7 @@ let chatAbortController = null;
 let userInsights = JSON.parse(localStorage.getItem('tm-insights') || '{"msgTotal":0, "topics":{}}');
 window.isSearchMode = false;
 
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-window._sendSuggestion = (key) => {
-    const ts = {
-        'sug1': 'اشرح مفهوماً معقداً ببساطة',
-        'sug2': 'اكتب لي كوداً برمجياً',
-        'sug3': 'أعطني أفكاراً إبداعية',
-        'sug4': 'لخص لي كتاباً مشهوراً'
-    };
-    if (messageInput) {
-        messageInput.value = ts[key] || '';
-        handleSend();
-    }
-};
-=======
 // Suggestion window function removed.
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
 window.currentActivePersona = 'ليلى';
 
 const API_BASE_URL = window.location.origin;
@@ -137,11 +122,7 @@ function appendMessage(content, sender, isHtml = false) {
     const avatarDiv = document.createElement('div');
     avatarDiv.className = `msg-avatar ${sender === 'ai' ? 'ai-avatar' : 'user-avatar'}`;
     if (sender === 'ai') {
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-        avatarDiv.innerHTML = '<div style="font-size:1.5rem; display:flex; align-items:center; justify-content:center; width:100%; height:100%; background:var(--bg-tertiary); border-radius:50%;">🧠</div>';
-=======
         avatarDiv.innerHTML = '<img src="assets/tunisia-brain-new.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" alt="AI">';
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
     } else {
         avatarDiv.innerHTML = '<i class="fa-solid fa-user"></i>';
     }
@@ -162,12 +143,7 @@ function appendMessage(content, sender, isHtml = false) {
         const actionsDiv = document.createElement('div');
         actionsDiv.className = 'msg-actions';
         actionsDiv.innerHTML = `
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-            <button class="msg-action-btn copy-msg-btn" onclick="navigator.clipboard.writeText(this.parentElement.previousElementSibling.innerText); const toast = document.getElementById('toast'); if(toast){toast.textContent='تم النسخ!'; toast.className='toast show success'; setTimeout(()=>toast.className='toast',3000);} else {alert('تم النسخ!');}"><i class="fa-regular fa-copy"></i> نسخ</button>
-            <button class="msg-action-btn tts-msg-btn" onclick="window.playTTS(this.parentElement.previousElementSibling.innerText, this)"><i class="fa-solid fa-volume-up"></i> استماع</button>
-=======
             <button class="msg-action-btn copy-msg-btn" onclick="navigator.clipboard.writeText(this.closest('.msg-body').querySelector('.msg-content').innerText); window.showToast?.('تم النسخ!', 'success');"><i class="fa-regular fa-copy"></i> نسخ</button>
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
         `;
         bodyDiv.appendChild(actionsDiv);
     }
@@ -189,136 +165,18 @@ function appendTypingIndicator() {
     const lang = window.currentLang || localStorage.getItem('tunisiaLang') || 'ar';
     const thinkingText = window.translations?.[lang]?.thinking || "يفكر...";
     msgDiv.innerHTML = `
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-        <div class="msg-avatar ai-avatar"><div style="font-size:1.5rem; display:flex; align-items:center; justify-content:center; width:100%; height:100%; background:var(--bg-tertiary); border-radius:50%;">🧠</div></div>
-        <div class="msg-body"><div class="typing-indicator"><span></span><span></span><span></span></div></div>
-=======
         <div class="msg-avatar ai-avatar"><img src="assets/tunisia-brain-new.jpg" style="width:100%; height:100%; object-fit:cover; border-radius:50%;" alt="AI"></div>
         <div class="msg-body">
             <div style="display:flex; align-items:center; gap:10px; color:var(--text-secondary); font-size:0.9rem; font-weight:500;">
                 <span>${thinkingText}</span><div class="typing-indicator"><span></span><span></span><span></span></div>
             </div>
         </div>
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
     `;
     messagesWrapper.appendChild(msgDiv);
     scrollToBottom();
     return id;
 }
 
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-async function handleSend() {
-    try {
-    if (isProcessing) return;
-    
-    const text = messageInput.value.trim();
-    if (!text && !attachedFileContent && !attachedImage) return;
-
-
-    if (text.toLowerCase().includes('أصنع لي مشروع') || text.toLowerCase().includes('بناء مشروع')) {
-        const lines = text.split('\n');
-        const projName = lines[0].replace(/أصنع لي مشروع|بناء مشروع/g, '').trim() || "تطبيق جديد";
-        window.startProjectGeneration(projName, "web", text);
-        appendMessage('🚀 حاضر! سأبدأ الآن ببناء مشروعك في مساحة العمل المجاورة.', 'ai');
-        messageInput.value = '';
-        return;
-    }
-
-    if (/^(ارسم|تخيل|صورة|صنع صورة|توليد صورة)\b/.test(text.trim())) {
-        isProcessing = true;
-        sendBtn.disabled = true; messageInput.disabled = true; sendBtn.classList.add('loading');
-        messageInput.value = ''; messageInput.style.height = 'auto'; hideWelcome();
-        appendMessage(text, 'user');
-        const indicatorId = appendTypingIndicator();
-        try {
-            const promptContent = text.replace(/^(ارسم|تخيل|صورة|صنع صورة|توليد صورة)/g, '').trim() || text;
-            const res = await fetch(`${API_BASE_URL}/api/generate-image`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ prompt: promptContent })
-            });
-            const data = await res.json();
-            document.getElementById(indicatorId)?.remove();
-            if (data.imageUrl) {
-                appendMessage(`إليك الصورة التي طلبتها 🎨:<br><img src="${data.imageUrl}" style="max-width:100%; border-radius:10px; margin-top:10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);" alt="صورة مولدة بواسطة الذكاء الاصطناعي">`, 'ai');
-            } else {
-                appendMessage(`❌ خطأ: ${data.error || 'فشل توليد الصورة'}`, 'ai');
-            }
-        } catch (e) {
-            document.getElementById(indicatorId)?.remove();
-            appendMessage(`❌ تعذر الاتصال بخادم توليد الصور.`, 'ai');
-        }
-        isProcessing = false;
-        sendBtn.disabled = false; messageInput.disabled = false; sendBtn.classList.remove('loading');
-        return;
-    }
-
-    if (/^(تصدير|حمل|نزل|تحميل) (المحادثة|الدردشة)\b/.test(text.trim()) || text.toLowerCase().includes('export chat')) {
-        isProcessing = true;
-        sendBtn.disabled = true; messageInput.disabled = true; sendBtn.classList.add('loading');
-        messageInput.value = ''; messageInput.style.height = 'auto'; hideWelcome();
-        appendMessage(text, 'user');
-        
-        if (window.currentChatId && window.exportChatFromMenu) {
-            appendMessage('حاضر! قمت بتصدير المحادثة الحالية لك بصيغة ملف نصي وسيبدأ التحميل الآن 📥.', 'ai');
-            window.exportChatFromMenu(window.currentChatId);
-        } else {
-            appendMessage('لا توجد محادثة محفوظة حتى الآن لتصديرها. من فضلك اكتب بعض الرسائل أولاً حتى يتم حفظ المحادثة.', 'ai');
-        }
-        
-        isProcessing = false;
-        sendBtn.disabled = false; messageInput.disabled = false; sendBtn.classList.remove('loading');
-        return;
-    }
-
-    isProcessing = true;
-    sendBtn.disabled = true;
-    messageInput.disabled = true;
-    sendBtn.classList.add('loading');
-    
-    messageInput.value = '';
-    messageInput.style.height = 'auto';
-    hideWelcome();
-
-    if (attachedFileContent) {
-        appendMessage(`<div class="file-tag"><i class="fa-solid fa-file-code"></i> ${attachedFileName}</div>${text}`, 'user', true);
-    } else if (attachedImage) {
-        appendMessage(`<div class="img-preview-msg"><img src="${attachedImage}"></div>${text}`, 'user', true);
-    } else {
-        appendMessage(text, 'user');
-    }
-    // حفظ رسالة المستخدم
-    window.saveMessageToCurrentChat?.(text, 'user');
-
-    const mainIndicatorId = appendTypingIndicator();
-    let fullAiResponse = "";
-
-    try {
-        const history = Array.from(document.querySelectorAll('#messagesWrapper .message:not([id^="typing-"])')).slice(-11, -1).map(msg => ({
-            role: msg.classList.contains('user') ? 'user' : 'assistant',
-            content: msg.querySelector('.msg-content')?.innerText || ''
-        }));
-
-        let finalPrompt = attachedFileContent 
-            ? `${text}\n\n[محتوى المستند لتحليله]:\n${attachedFileContent}`
-            : text;
-
-        // Removed Persona Memory
-
-        const currentResponseLen = localStorage.getItem('tm-response-len') || 'medium';
-
-        const response = await fetch(`${API_BASE_URL}/api/chat`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                prompt: finalPrompt, 
-                history: history, 
-                stream: true, 
-                persona: window.currentActivePersona, 
-                image: attachedImage,
-                responseLen: currentResponseLen
-            })
-=======
 async function startAsyncImageGeneration(prompt) {
     const jobIdBox = 'img-job-' + Date.now();
     
@@ -351,7 +209,6 @@ async function startAsyncImageGeneration(prompt) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt: prompt })
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
         });
         const data = await res.json();
         
@@ -359,73 +216,6 @@ async function startAsyncImageGeneration(prompt) {
             throw new Error(data.error || "تعذر بدء عملية توليد الصورة.");
         }
 
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-        const indicator = document.getElementById(mainIndicatorId);
-        if (indicator) indicator.remove();
-
-        const aiMsgDiv = appendMessage("", 'ai');
-        const aiContentDiv = aiMsgDiv.querySelector('.msg-content');
-
-        if (!response.ok) {
-            fullAiResponse = "⚠️ عذراً، الخادم مشغُول أو غير متاح حالياً. يرجى المحاولة بعد قليل.";
-            aiContentDiv.innerHTML = formatMarkdown(fullAiResponse);
-        } else {
-            const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let streamBuffer = '';
-        while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            const chunk = decoder.decode(value, { stream: true });
-            streamBuffer += chunk;
-            const lines = streamBuffer.split('\n\n');
-            streamBuffer = lines.pop(); // Keep the last incomplete part in the buffer
-            
-            for (const line of lines) {
-                if (line.startsWith('data: ')) {
-                    const dataLine = line.slice(6).trim();
-                    if (dataLine === '[DONE]') break;
-                    try {
-                        const parsed = JSON.parse(dataLine);
-                        if (parsed.content) {
-                            fullAiResponse += parsed.content;
-                            aiContentDiv.innerHTML = formatMarkdown(fullAiResponse);
-                            scrollToBottom();
-                        }
-                    } catch (e) {}
-                }
-            }
-        }
-        } // Close else block
-
-        if (!fullAiResponse) {
-            fullAiResponse = "⚠️ عذراً، لم أتمكن من توليد رد صالح.";
-            aiContentDiv.innerHTML = formatMarkdown(fullAiResponse);
-        }
-
-        // Removed Memory Extraction
-
-        // Confidence Score (92% - 99%)
-        const confScore = Math.floor(Math.random() * 8) + 92;
-        const confDiv = document.createElement('div');
-        confDiv.className = 'confidence-score';
-        confDiv.style.cssText = 'margin-top:10px; font-size:0.75rem; color:#10b981; font-weight:bold; display:inline-flex; align-items:center; gap:4px; padding:2px 8px; background:rgba(16,185,129,0.1); border-radius:12px;';
-        confDiv.innerHTML = `<i class="fa-solid fa-check-double"></i> دقة الاستنتاج: ${confScore}%`;
-        aiMsgDiv.querySelector('.msg-body').appendChild(confDiv);
-
-        // Hints
-        const suggestMatch = fullAiResponse.match(/\[\[S:(.*?)\]\]/);
-        if (suggestMatch) {
-            renderSuggestions(suggestMatch[1].split('|').map(s => s.trim()));
-            fullAiResponse = fullAiResponse.replace(/\[\[S:.*?\]\]/g, '');
-            aiContentDiv.innerHTML = formatMarkdown(fullAiResponse);
-        }
-        
-        applyPlugins(aiContentDiv);
-        // حفظ رد الذكاء الاصطناعي
-        if (fullAiResponse) window.saveMessageToCurrentChat?.(fullAiResponse.trim(), 'ai');
-        if (window.renderWelcomeStats) window.renderWelcomeStats();
-=======
         const earlyImgUrl = data.image_url || data.imageUrl || data.url;
         
         // Helper function to render image
@@ -481,7 +271,6 @@ async function startAsyncImageGeneration(prompt) {
                 clearInterval(poll);
                 return;
             }
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
 
             try {
                 let sRes = await fetch(`${API_BASE_URL}/api/image-status/${jobId}`);
@@ -793,19 +582,11 @@ async function handleSend() {
         }
     } catch (globalError) {
         console.error("CRITICAL FATAL ERROR IN HANDLESEND:", globalError);
-        alert("حدث خطأ برمجي يمنع الإرسال: " + globalError.message);
         isProcessing = false;
         sendBtn.disabled = false;
         messageInput.disabled = false;
         sendBtn.classList.remove('loading');
-    }
-    } catch (globalError) {
-        console.error("CRITICAL FATAL ERROR IN HANDLESEND:", globalError);
-        alert("حدث خطأ برمجي يمنع الإرسال: " + globalError.message);
-        isProcessing = false;
-        sendBtn.disabled = false;
-        messageInput.disabled = false;
-        sendBtn.classList.remove('loading');
+        appendMessage('⚠️ حدث خطأ: ' + globalError.message, 'ai');
     }
 }
 
@@ -865,37 +646,6 @@ function initChat() {
         fileIn.onchange = async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-            // Limit file size to 2MB
-            if (file.size > 2 * 1024 * 1024) {
-                window.showToast?.('حجم الملف كبير جداً (الحد الأقصى 2MB)', 'error');
-                fileIn.value = '';
-                return;
-            }
-            attachedFileName = file.name;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                if (file.type.startsWith('image/')) {
-                    attachedImage = ev.target.result;
-                    const img = document.getElementById('imagePreviewImg');
-                    if (img) img.src = ev.target.result;
-                } else {
-                    attachedFileContent = ev.target.result;
-                    const img = document.getElementById('imagePreviewImg');
-                    if (img) img.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"><path fill="%2310b981" d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>';
-                }
-                const preview = document.getElementById('imagePreviewContainer');
-                if (preview) preview.style.display = 'flex';
-                window.showToast?.(`✅ تم إرفاق: ${file.name}`, 'success');
-            };
-            reader.onerror = () => {
-                window.showToast?.('فشل قراءة الملف', 'error');
-                fileIn.value = '';
-            };
-            if (file.type.startsWith('image/')) reader.readAsDataURL(file);
-            else reader.readAsText(file, 'UTF-8');
-=======
-
             // Limit file size to 10MB for PDFs, 2MB for others
             const limit = file.type === 'application/pdf' ? 10 * 1024 * 1024 : 2 * 1024 * 1024;
             if (file.size > limit) {
@@ -951,7 +701,6 @@ function initChat() {
                 if (file.type.startsWith('image/')) reader.readAsDataURL(file);
                 else reader.readAsText(file, 'UTF-8');
             }
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
         };
     }
     if (imageIn) {
@@ -980,33 +729,19 @@ function initChat() {
             reader.readAsDataURL(file);
         };
     }
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-    
-=======
 
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
     // Cancel image/file preview
     const cancelPreviewBtn = document.getElementById('cancelImagePreviewBtn');
     if (cancelPreviewBtn) {
         cancelPreviewBtn.onclick = () => {
             attachedImage = null;
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-=======
             attachedVideoFrames = null;
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
             attachedFileContent = null;
             attachedFileName = null;
             const preview = document.getElementById('imagePreviewContainer');
             if (preview) preview.style.display = 'none';
             const fileIn = document.getElementById('fileInputAlpha');
             const imageIn = document.getElementById('imageInput');
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-            if (fileIn) fileIn.value = '';
-            if (imageIn) imageIn.value = '';
-        };
-    }
-
-=======
             const videoIn = document.getElementById('videoInput');
             if (fileIn) fileIn.value = '';
             if (imageIn) imageIn.value = '';
@@ -1064,8 +799,6 @@ function initChat() {
     }
 
 
-
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
     // Auto-resize textarea
     if (messageInput) {
         messageInput.addEventListener('input', () => {
@@ -1082,11 +815,7 @@ function initChat() {
             attachMenu.style.display = 'none';
         }
     });
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-    
-=======
 
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
     // Setup STT features
     setupSpeechServices();
 }
@@ -1174,11 +903,7 @@ window.playTTS = (text, btn) => {
     const cleanText = text.replace(/<[^>]*>?/gm, '').replace(/[*_`]/g, '');
     const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = 'ar-SA';
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-    
-=======
 
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
     utterance.pitch = 1.0;
     utterance.rate = 1.0;
 
@@ -1205,19 +930,6 @@ function setupSpeechServices() {
     // Defaulting to Arabic tuning
     recognition.lang = 'ar-SA';
     recognition.interimResults = true;
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-    recognition.continuous = true; 
-    
-    let isRecording = false;
-
-    recognition.onresult = (e) => {
-        let transcript = '';
-        for (let i = e.resultIndex; i < e.results.length; i++) {
-            transcript += e.results[i][0].transcript;
-        }
-        if (messageInput) {
-            messageInput.value = transcript;
-=======
     recognition.continuous = true;
 
     let isRecording = false;
@@ -1233,7 +945,6 @@ function setupSpeechServices() {
             // Append instead of overwrite
             const currentVal = messageInput.value.trim();
             messageInput.value = currentVal ? currentVal + ' ' + final_transcript : final_transcript;
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
             messageInput.style.height = 'auto';
             messageInput.style.height = Math.min(messageInput.scrollHeight, 180) + 'px';
         }
@@ -1252,14 +963,10 @@ function setupSpeechServices() {
         if (isRecording) {
             recognition.stop();
         } else {
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-            if(messageInput) messageInput.value = '';
-=======
             // Set dynamic language based on UI or default to AR/EN hybrid support if browser allows
             const currentLang = localStorage.getItem('tunisiaLang') || 'ar';
             recognition.lang = (currentLang === 'en') ? 'en-US' : 'ar-SA';
 
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
             recognition.start();
             isRecording = true;
             micBtn.classList.add('recording');
@@ -1270,35 +977,7 @@ function setupSpeechServices() {
     };
 }
 
-<<<<<<< HEAD:tunisia-mind-web/public/js/chat.js
-// ========== Voice Integration (TTS) ==========
 
-window.playTTS = (text, btn) => {
-    if (!window.speechSynthesis) {
-        alert("متصفحك لا يدعم القراءة الصوتية.");
-        return;
-    }
-    if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.cancel();
-    }
-=======
->>>>>>> 9267eec (Enhance AI prompt with website builder and image generation instructions, and update translations):public/js/chat.js
-
-    // Clean text from markdown/html
-    const cleanText = text.replace(/<[^>]*>?/gm, '').replace(/[*_`]/g, '');
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = 'ar-SA';
-    utterance.pitch = 1.0;
-    utterance.rate = 1.0;
-
-    const originalHtml = btn.innerHTML;
-    btn.innerHTML = '<i class="fa-solid fa-volume-up fa-fade"></i> يتحدث...';
-    
-    utterance.onend = () => { btn.innerHTML = originalHtml; };
-    utterance.onerror = () => { btn.innerHTML = originalHtml; };
-    
-    window.speechSynthesis.speak(utterance);
-};
 // ========== PDF Export ==========
 window.exportToPDF = () => {
     const chatContainer = document.getElementById('messagesWrapper');
@@ -1337,6 +1016,94 @@ window.exportToPDF = () => {
     html2pdf().set(opt).from(printArea).save().then(() => {
         if (toast) { toast.textContent = '✅ تم التصدير بنجاح!'; toast.className = 'toast show success'; setTimeout(() => toast.className = 'toast', 3000); }
     });
+};
+
+// ========== Text Export ==========
+window.exportToText = () => {
+    const chatContainer = document.getElementById('messagesWrapper');
+    if (!chatContainer || chatContainer.children.length === 0) {
+        return alert("لا توجد محادثة لتصديرها.");
+    }
+
+    let textContent = "محادثة ذكية - العقل التونسي AI\n\n";
+    const messages = chatContainer.querySelectorAll('.message');
+    messages.forEach(msg => {
+        const isUser = msg.classList.contains('user');
+        const sender = isUser ? "أنت" : "العقل التونسي AI";
+        const contentNode = msg.querySelector('.msg-content');
+        if(contentNode) {
+            let text = contentNode.innerText.trim();
+            textContent += `${sender}:\n${text}\n\n------------------------\n\n`;
+        }
+    });
+
+    const blob = new Blob([textContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `chat-${Date.now()}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    const toast = document.getElementById('toast');
+    if (toast) { toast.textContent = '✅ تم التصدير النصي بنجاح!'; toast.className = 'toast show success'; setTimeout(() => toast.className = 'toast', 3000); }
+};
+
+// ========== Image Export ==========
+window.exportToImage = () => {
+    const chatContainer = document.getElementById('messagesWrapper');
+    if (!chatContainer || chatContainer.children.length === 0) {
+        return alert("لا توجد محادثة لتصديرها.");
+    }
+
+    const toast = document.getElementById('toast');
+    if (toast) { toast.textContent = '🖼️ جاري تجهيز الصورة...'; toast.className = 'toast show'; }
+
+    // Use html2canvas via html2pdf library bundle or native html2canvas if available
+    // html2pdf bundle usually includes html2canvas globally
+    if (typeof html2canvas === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+        script.onload = () => doImageExport();
+        document.head.appendChild(script);
+    } else {
+        doImageExport();
+    }
+
+    function doImageExport() {
+        const printArea = document.createElement('div');
+        printArea.innerHTML = chatContainer.innerHTML;
+        printArea.style.padding = '20px';
+        printArea.style.background = '#1e1e1e'; // dark theme background
+        printArea.style.color = '#ffffff';
+        printArea.querySelectorAll('.msg-actions').forEach(el => el.remove());
+        printArea.querySelectorAll('.suggestion-card').forEach(el => el.remove());
+
+        const header = document.createElement('h2');
+        header.style.textAlign = 'center';
+        header.style.color = '#10b981';
+        header.innerText = 'محادثة ذكية - العقل التونسي AI';
+        printArea.prepend(header);
+
+        document.body.appendChild(printArea);
+        printArea.style.position = 'absolute';
+        printArea.style.left = '-9999px';
+
+        html2canvas(printArea, { scale: 2, backgroundColor: '#1e1e1e', useCORS: true }).then(canvas => {
+            const a = document.createElement('a');
+            a.href = canvas.toDataURL('image/jpeg', 0.9);
+            a.download = `chat-${Date.now()}.jpg`;
+            a.click();
+            document.body.removeChild(printArea);
+            if (toast) { toast.textContent = '✅ تم تصدير الصورة بنجاح!'; toast.className = 'toast show success'; setTimeout(() => toast.className = 'toast', 3000); }
+        }).catch(err => {
+            document.body.removeChild(printArea);
+            console.error('Image Export Error:', err);
+            if (toast) { toast.textContent = '⚠️ فشل تصدير الصورة.'; toast.className = 'toast show error'; setTimeout(() => toast.className = 'toast', 3000); }
+        });
+    }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
